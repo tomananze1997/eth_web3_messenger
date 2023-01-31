@@ -8,7 +8,7 @@ type DarkModeProviderTypes = {
 };
 
 export const DarkModeProvider: FC<DarkModeProviderTypes> = ({ children }) => {
-  const [theme, setTheme] = useLocalStorage<string>('theme', '');
+  const [theme, setTheme] = useLocalStorage<string>('theme', 'light');
 
   const changeTheme = () => {
     setTheme(theme === 'light' ? 'dark' : 'light');
@@ -16,11 +16,9 @@ export const DarkModeProvider: FC<DarkModeProviderTypes> = ({ children }) => {
 
   useEffect(
     () => () => {
-      if (typeof window !== 'undefined') {
-        const theme = window.localStorage.getItem('theme');
+      const theme = window.localStorage.getItem('theme');
 
-        setTheme(theme === ('light' || 'dark') ? theme : 'light');
-      }
+      setTheme(theme === ('light' || 'dark') ? theme : 'light');
     },
     []
   );

@@ -12,7 +12,11 @@ export const Title: FC<TitleTypes> = ({
   const titleStyles = 'p-1 text-xl font-bold';
   return (
     <>
-      <div className={'mx-auto mt-1 rounded-xl bg-slate-800 p-1 text-center'}>
+      <div
+        className={
+          'mx-auto mt-1 rounded-xl p-1 text-center shadow-2xl dark:bg-slate-800'
+        }
+      >
         <h1
           className={classNames(
             titleStyles,
