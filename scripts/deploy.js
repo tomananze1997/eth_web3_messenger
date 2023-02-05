@@ -1,4 +1,4 @@
-require('@nomicfoundation/hardhat-toolbox');
+const { ethers } = require('hardhat');
 
 async function main() {
   const [deployer] = await ethers.getSigners();

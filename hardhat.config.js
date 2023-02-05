@@ -1,4 +1,4 @@
-require('@nomicfoundation/hardhat-toolbox');
+require('@nomiclabs/hardhat-ethers');
 require('@next/env').loadEnvConfig('./');
 
 /** @type import('hardhat/config').HardhatUserConfig */
