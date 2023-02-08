@@ -1,0 +1,1 @@
+export * from './messengerContract-type';

@@ -1,7 +1,7 @@
 import classNames from 'classnames';
 import { Message, NewMessage, Title } from 'components';
 import type { FC } from 'react';
-import { useEffect, useRef, useState } from 'react';
+import { useRef } from 'react';
 
 type MainContentTypes = {
   otherStyles?: string;

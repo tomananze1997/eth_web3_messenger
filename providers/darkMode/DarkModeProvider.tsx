@@ -14,14 +14,13 @@ export const DarkModeProvider: FC<DarkModeProviderTypes> = ({ children }) => {
     setTheme(theme === 'light' ? 'dark' : 'light');
   };
 
-  useEffect(
-    () => () => {
-      const theme = window.localStorage.getItem('theme');
+  useEffect(() => {
+    const localStorageTheme = window.localStorage.getItem('theme');
 
-      setTheme(theme === ('light' || 'dark') ? theme : 'light');
-    },
-    []
-  );
+    setTheme(
+      localStorageTheme === ('light' || 'dark') ? localStorageTheme : 'light'
+    );
+  }, []);
 
   return (
     <DarkModeContext.Provider

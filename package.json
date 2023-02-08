@@ -12,8 +12,11 @@
   "dependencies": {
     "@emotion/react": "^11.10.5",
     "@emotion/styled": "^11.10.5",
+    "@metamask/detect-provider": "^2.0.0",
     "@mui/material": "^5.11.6",
     "@next/env": "^13.1.5",
+    "@rainbow-me/rainbowkit": "^0.8.1",
+    "@truffle/hdwallet-provider": "^2.1.6",
     "@types/node": "18.11.9",
     "@types/react": "18.0.25",
     "@types/react-dom": "18.0.9",
@@ -23,15 +26,16 @@
     "next": "13.0.4",
     "react": "18.2.0",
     "react-dom": "18.2.0",
-    "react-icons": "^4.7.1"
+    "react-icons": "^4.7.1",
+    "swr": "^2.0.3",
+    "wagmi": "^0.9.6"
   },
   "devDependencies": {
-    "@nomiclabs/hardhat-ethers": "^2.2.2",
     "@trivago/prettier-plugin-sort-imports": "^3.4.0",
     "@typescript-eslint/eslint-plugin": "^5.43.0",
     "@typescript-eslint/parser": "^5.43.0",
     "autoprefixer": "^10.4.13",
-    "hardhat": "^2.12.6",
+    "ethereum-abi-types-generator": "^1.3.2",
     "postcss": "^8.4.19",
     "prettier": "^2.7.1",
     "prettier-plugin-tailwindcss": "^0.1.13",

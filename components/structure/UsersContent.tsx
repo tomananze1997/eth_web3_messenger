@@ -1,4 +1,5 @@
 import Switch from '@mui/material/Switch';
+import { ConnectButton } from '@rainbow-me/rainbowkit';
 import classNames from 'classnames';
 import { useDarkModeContext } from 'providers';
 import type { FC } from 'react';
@@ -6,8 +7,8 @@ import { FaSun } from 'react-icons/fa';
 import { MdDarkMode } from 'react-icons/md';
 
 export const UsersContent: FC = () => {
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [theme, toggleTheme] = useDarkModeContext();
+
   return (
     <>
       <section
@@ -15,6 +16,13 @@ export const UsersContent: FC = () => {
           'flex h-full w-full flex-col break-words pt-10 shadow-2xl dark:bg-slate-800'
         }
       >
+        <div
+          className={
+            'mx-auto text-xs sm:text-sm md:text-xs lg:text-sm xl:text-base'
+          }
+        >
+          <ConnectButton accountStatus='avatar' showBalance={true} />
+        </div>
         <div className={'mx-auto'}>
           <Switch
             icon={
@@ -42,8 +50,9 @@ export const UsersContent: FC = () => {
             Dark mode is {theme === 'dark' ? 'on' : 'off'}
           </span>
         </div>
-        <div className={'pt-3.5'} />
-        <h1> Test </h1>
+        <div className={'pt-3.5'}>
+          <h1> Test </h1>
+        </div>
       </section>
     </>
   );
