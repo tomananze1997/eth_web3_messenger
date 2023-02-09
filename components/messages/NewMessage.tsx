@@ -58,7 +58,7 @@ export const NewMessage: FC<NewMessageTypes> = ({ scrollToBottom }) => {
           }
           placeholder={'Aa...'}
           className={
-            'relative my-2 w-full overflow-hidden rounded-xl py-0.5 px-2 pr-8 text-black focus:outline-none'
+            'relative my-2 w-full resize-none overflow-hidden rounded-xl py-0.5 px-2 pr-8 text-black focus:outline-none'
           }
           rows={1}
           ref={textareaRef}

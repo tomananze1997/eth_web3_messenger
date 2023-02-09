@@ -1,8 +1,8 @@
 import classNames from 'classnames';
 import { ChatsContent, MainContent, UsersContent } from 'components';
-import { useWindowWidth } from 'hooks';
+import { useIsConnected, useWindowWidth } from 'hooks';
 import type { NextPage } from 'next';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { MdChat, MdClose, MdManageAccounts } from 'react-icons/md';
 
 const Home: NextPage = () => {
@@ -19,6 +19,14 @@ const Home: NextPage = () => {
   const [leftActive, setLeftActive] = useState(false);
   const [rightActive, setRightActive] = useState(false);
   const [windowWidth] = useWindowWidth();
+  const { isConnected, userExists } = useIsConnected();
+
+  useEffect(() => {
+    if (!isConnected || !userExists) {
+      setRightActive(true);
+      setLeftActive(false);
+    }
+  }, [isConnected, userExists]);
 
   const handleLeftClick = (): void => {
     setLeftActive(!leftActive);
@@ -35,18 +43,24 @@ const Home: NextPage = () => {
       <div className={'flex h-full'}>
         {windowWidth && windowWidth <= 768 ? (
           <>
-            <MdChat
-              onClick={handleLeftClick}
-              className={classNames(leftIconStyle, {
-                'translate-x-160px opacity-0 sm:translate-x-214px ': leftActive
-              })}
-            />
-            <MdClose
-              onClick={handleLeftClick}
-              className={classNames(leftIconStyle, 'opacity-0', {
-                'translate-x-160px opacity-100 sm:translate-x-214px': leftActive
-              })}
-            />
+            {isConnected && userExists && (
+              <>
+                <MdChat
+                  onClick={handleLeftClick}
+                  className={classNames(leftIconStyle, {
+                    'translate-x-160px opacity-0 sm:translate-x-214px ':
+                      leftActive
+                  })}
+                />
+                <MdClose
+                  onClick={handleLeftClick}
+                  className={classNames(leftIconStyle, 'opacity-0', {
+                    'translate-x-160px opacity-100 sm:translate-x-214px':
+                      leftActive
+                  })}
+                />
+              </>
+            )}
             <div
               className={classNames(sliderStyle, {
                 '-translate-x-190px sm:-translate-x-250px': !leftActive
@@ -73,20 +87,24 @@ const Home: NextPage = () => {
 
         {windowWidth && windowWidth <= 768 ? (
           <>
-            <MdManageAccounts
-              onClick={handleRightClick}
-              className={classNames(rightIconStyle, {
-                '-translate-x-160px opacity-0 sm:-translate-x-214px':
-                  rightActive
-              })}
-            />
-            <MdClose
-              onClick={handleRightClick}
-              className={classNames(rightIconStyle, 'opacity-0', {
-                '-translate-x-160px opacity-100 sm:-translate-x-214px':
-                  rightActive
-              })}
-            />
+            {isConnected && userExists && (
+              <>
+                <MdManageAccounts
+                  onClick={handleRightClick}
+                  className={classNames(rightIconStyle, {
+                    '-translate-x-160px opacity-0 sm:-translate-x-214px':
+                      rightActive
+                  })}
+                />
+                <MdClose
+                  onClick={handleRightClick}
+                  className={classNames(rightIconStyle, 'opacity-0', {
+                    '-translate-x-160px opacity-100 sm:-translate-x-214px':
+                      rightActive
+                  })}
+                />
+              </>
+            )}
             <div
               className={classNames(sliderStyle, 'right-0', {
                 'translate-x-190px sm:translate-x-250px': !rightActive

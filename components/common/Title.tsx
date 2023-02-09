@@ -1,5 +1,5 @@
 import classNames from 'classnames';
-import { useShortenedString } from 'hooks';
+import { useIsConnected, useShortenedString } from 'hooks';
 import type { FC } from 'react';
 
 type TitleTypes = {
@@ -10,6 +10,16 @@ export const Title: FC<TitleTypes> = ({
   chatTitle = 'Choose/create new chat'
 }) => {
   const titleStyles = 'p-1 text-xl font-bold';
+  const { isConnected, userExists } = useIsConnected();
+
+  chatTitle = isConnected
+    ? userExists
+      ? chatTitle
+      : 'Choose username!'
+    : userExists
+    ? 'Connect wallet!'
+    : 'Choose username!';
+
   return (
     <>
       <div
