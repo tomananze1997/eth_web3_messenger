@@ -1,45 +1,57 @@
-import classNames from 'classnames';
 import { Message, NewMessage, Title } from 'components';
+import { contractClass } from 'const';
+import { useIsConnected } from 'hooks';
+import { useSelectedContent } from 'providers';
 import type { FC } from 'react';
 import { useRef } from 'react';
+import type { MessageResponse } from 'types';
+import { useContractRead } from 'wagmi';
 
-type MainContentTypes = {
-  otherStyles?: string;
-};
-export const MainContent: FC<MainContentTypes> = ({ otherStyles }) => {
+export const MainContent: FC = () => {
   const lastDivRef = useRef<HTMLDivElement>(null);
   const scrollSectionRef = useRef<HTMLDivElement>(null);
 
-  const scrollToBottom = () => {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [_, activeChatContent] = useSelectedContent();
+  const { currentUserAddress } = useIsConnected();
+
+  const { data, isLoading, isError } = useContractRead({
+    address: activeChatContent ? contractClass.GOERLI_ADDRESS : undefined,
+    abi: contractClass.ABI,
+    functionName: contractClass.GET_ALL_MESSAGES_IN_CHAT,
+    args: [activeChatContent?.id],
+    overrides: { from: currentUserAddress }
+  });
+
+  const scrollToBottom = (): void => {
     lastDivRef.current && lastDivRef.current.scrollIntoView();
   };
 
   return (
     <>
-      <div className={classNames(otherStyles, 'flex h-full flex-col')}>
-        <Title />
+      <div className={'flex h-full w-full flex-col lg:mx-12 xl:mx-28'}>
+        <Title
+          chatTitle={activeChatContent ? activeChatContent.chatName : undefined}
+        />
         <div
           className={
             'mx-6 my-2 flex h-4/5 flex-col rounded-xl p-1 shadow-2xl dark:bg-slate-800'
           }
         >
           <div className={'snap-end overflow-y-auto'} ref={scrollSectionRef}>
-            <Message />
-            <Message />
-            <Message />
-            <Message />
-            <Message />
-            <Message />
-            <Message />
-            <Message />
-            <Message />
-            <Message />
-            <Message />
-            <Message />
-            <Message />
-            <Message />
-            <Message />
-            <Message isOwner={true} />
+            {!isLoading && !isError && data && Array.isArray(data)
+              ? data.map((message: MessageResponse) =>
+                  message.owner.userAddress == currentUserAddress ? (
+                    <Message
+                      key={message.id}
+                      isOwner={true}
+                      message={message}
+                    />
+                  ) : (
+                    <Message key={message.id} message={message} />
+                  )
+                )
+              : null}
             <div ref={lastDivRef} />
           </div>
           <div className={'mt-auto '}>

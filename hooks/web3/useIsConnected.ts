@@ -8,12 +8,12 @@ export const useIsConnected = () => {
   const { data, isLoading } = useContractRead({
     address: !isDisconnected ? contractClass.GOERLI_ADDRESS : undefined,
     abi: contractClass.ABI,
-    functionName: contractClass.DOES_USER_EXIST
+    functionName: contractClass.DOES_USER_EXIST,
+    overrides: { from: address }
   });
 
-  // eslint-disable-next-line @typescript-eslint/no-empty-function
   useEffect(() => {
-    console.log(data);
+    !isLoading && console.log('Does user exist: ', data);
   }, [address, data]);
 
   return {

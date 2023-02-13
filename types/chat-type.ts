@@ -1,9 +1,8 @@
-import type { MessageType } from './message-type';
-import type { UserType } from './user-type';
+import type { OtherUserType } from './user-type';
 
 export interface ChatType {
-  id: string;
+  id: number;
   chatName: string;
-  users: UserType[];
-  messages: MessageType[];
+  users: OtherUserType[];
+  messagesId: number[];
 }

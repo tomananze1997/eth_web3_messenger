@@ -1,5 +1,5 @@
 import classNames from 'classnames';
-import { ChatsContent, MainContent, UsersContent } from 'components';
+import { LeftContent, MainContent, RightContent } from 'components';
 import { useIsConnected, useWindowWidth } from 'hooks';
 import type { NextPage } from 'next';
 import { useEffect, useState } from 'react';
@@ -66,7 +66,7 @@ const Home: NextPage = () => {
                 '-translate-x-190px sm:-translate-x-250px': !leftActive
               })}
             >
-              <ChatsContent />
+              <LeftContent />
             </div>
 
             <div
@@ -78,7 +78,7 @@ const Home: NextPage = () => {
         ) : (
           <>
             <div className={sideSlidersMedia}>
-              <ChatsContent />
+              <LeftContent />
             </div>
           </>
         )}
@@ -110,7 +110,7 @@ const Home: NextPage = () => {
                 'translate-x-190px sm:translate-x-250px': !rightActive
               })}
             >
-              <UsersContent />
+              <RightContent />
             </div>
 
             <div
@@ -122,7 +122,7 @@ const Home: NextPage = () => {
         ) : (
           <>
             <div className={sideSlidersMedia}>
-              <UsersContent />
+              <RightContent />
             </div>
           </>
         )}

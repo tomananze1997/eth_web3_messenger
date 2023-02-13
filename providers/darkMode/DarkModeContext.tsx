@@ -1,12 +1,13 @@
 import type { Context } from 'react';
 import { createContext } from 'react';
 
-type DarkModeContextType = {
+type DarkModeContextTypes = {
   theme: string;
   changeTheme: () => void;
 };
 
-export const DarkModeContext: Context<DarkModeContextType> = createContext({
-  theme: 'light',
-  changeTheme: () => '' as any
-});
+export const DarkModeContext: Context<DarkModeContextTypes> =
+  createContext<DarkModeContextTypes>({
+    theme: 'light',
+    changeTheme: () => ''
+  });

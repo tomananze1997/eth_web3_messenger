@@ -1,79 +1,212 @@
-// import { contractClass } from 'const';
-// import { useIsConnected } from 'hooks';
-// import type { FC } from 'react';
-// import {  useState } from 'react';
-// import type { UserResponse, UserType } from 'types';
-// import { useContractEvent, useContractRead } from 'wagmi';
-//
-// export const Web3Provider: FC = () => {
-//   const [currentUser, setCurrentUser] = useState<UserType | null>(null);
-//   const [allUsers, setAllUsers] = useState<UserResponse | null>(null);
-//
-//   const { currentUserAddress, isConnected, userExists } = useIsConnected();
-//
-//   const currentUserResponse = useContractRead({
-//     address:
-//       isConnected && userExists ? contractClass.GOERLI_ADDRESS : undefined,
-//     abi: contractClass.ABI,
-//     functionName: contractClass.GET_CURRENT_USER
-//   });
-//
-//   const allUsersResponse = useContractRead({
-//     address:
-//       isConnected && userExists ? contractClass.GOERLI_ADDRESS : undefined,
-//     abi: contractClass.ABI,
-//     functionName: contractClass.GET_ALL_USERS
-//   });
-//
-//   const allUserChats = useContractRead({
-//     address:
-//       isConnected && userExists ? contractClass.GOERLI_ADDRESS : undefined,
-//     abi: contractClass.ABI,
-//     functionName: contractClass.GET_ALL_USER_CHATS
-//   });
-//
-//   const allUsersInChat = useContractRead({
-//     address:
-//       isConnected && userExists ? contractClass.GOERLI_ADDRESS : undefined,
-//     abi: contractClass.ABI,
-//     functionName: contractClass.GET_ALL_USERS_IN_CHAT
-//   });
-//
-//   const allMessagesInChat = useContractRead({
-//     address:
-//       isConnected && userExists ? contractClass.GOERLI_ADDRESS : undefined,
-//     abi: contractClass.ABI,
-//     functionName: contractClass.GET_ALL_MESSAGES_IN_CHAT
-//   });
-//
-//   useContractEvent({
-//     address:
-//       isConnected && userExists ? contractClass.GOERLI_ADDRESS : undefined,
-//     abi: contractClass.ABI,
-//     eventName: contractClass.USERS_CHANGED,
-//     listener() {
-//       console.log('User has changed');
-//     }
-//   });
-//
-//   useContractEvent({
-//     address:
-//       isConnected && userExists ? contractClass.GOERLI_ADDRESS : undefined,
-//     abi: contractClass.ABI,
-//     eventName: contractClass.CHATS_CHANGED,
-//     listener() {
-//       console.log('Chats has changed');
-//     }
-//   });
-//
-//   useContractEvent({
-//     address:
-//       isConnected && userExists ? contractClass.GOERLI_ADDRESS : undefined,
-//     abi: contractClass.ABI,
-//     eventName: contractClass.MESSAGES_CHANGED,
-//     listener() {
-//       console.log('Messages has changed');
-//     }
-//   });
-//
-// };
+import { Web3Context } from './Web3Context';
+import { contractClass } from 'const';
+import { BigNumber } from 'ethers';
+import { useIsConnected } from 'hooks';
+import type { FC } from 'react';
+import React, { useEffect } from 'react';
+import { useState } from 'react';
+import type {
+  ChatResponse,
+  ChatType,
+  OtherUserType,
+  UserResponse,
+  UserType
+} from 'types';
+import { useContractEvent, useContractRead } from 'wagmi';
+
+type useWeb3ProviderTypes = {
+  children: React.ReactNode;
+};
+
+export const Web3Provider: FC<useWeb3ProviderTypes> = ({ children }) => {
+  const [currentUser, setCurrentUser] = useState<UserType | null>(null);
+  const [userChats, setUserChats] = useState<ChatType[]>([]);
+  const [allUsers, setAllUsers] = useState<OtherUserType[]>([]);
+  const [valueForRefresh, setValueForRefresh] = useState<number>(0);
+
+  const { currentUserAddress, isConnected, userExists } = useIsConnected();
+
+  const currentUserResponse = useContractRead({
+    address:
+      isConnected && userExists ? contractClass.GOERLI_ADDRESS : undefined,
+    abi: contractClass.ABI,
+    enabled: true,
+    functionName: contractClass.GET_CURRENT_USER,
+    overrides: { from: currentUserAddress }
+  });
+
+  const allUsersResponse = useContractRead({
+    address:
+      isConnected && userExists ? contractClass.GOERLI_ADDRESS : undefined,
+    abi: contractClass.ABI,
+    enabled: true,
+    functionName: contractClass.GET_ALL_USERS,
+    overrides: { from: currentUserAddress }
+  });
+
+  const allUserChatsResponse = useContractRead({
+    address:
+      isConnected && userExists ? contractClass.GOERLI_ADDRESS : undefined,
+    abi: contractClass.ABI,
+    enabled: true,
+    functionName: contractClass.GET_ALL_USER_CHATS,
+    overrides: { from: currentUserAddress }
+  });
+
+  useContractEvent({
+    address: isConnected ? contractClass.GOERLI_ADDRESS : undefined,
+    abi: contractClass.ABI,
+    eventName: contractClass.USERS_CHANGED,
+    listener() {
+      setValueForRefresh(valueForRefresh + 1);
+    }
+  });
+
+  useContractEvent({
+    address: isConnected ? contractClass.GOERLI_ADDRESS : undefined,
+    abi: contractClass.ABI,
+    eventName: contractClass.CHATS_CHANGED,
+    listener() {
+      setValueForRefresh(valueForRefresh + 1);
+    }
+  });
+
+  useEffect(() => {
+    if (isConnected && userExists) {
+      setAllUsersArray();
+      setUserChatsArray(); //must be behind setAllUsersArray!!
+      setCurrentUserArray(); //must be behind setUserChatsArray!!
+    }
+  }, [
+    currentUserResponse.data,
+    allUsersResponse.data,
+    allUserChatsResponse.data,
+    currentUserAddress,
+    valueForRefresh
+  ]);
+
+  const setAllUsersArray = (): void => {
+    const newUsersArray: OtherUserType[] = [];
+    let newUsersResponseArray: UserResponse[] = [];
+
+    if (
+      allUsersResponse.data &&
+      !allUsersResponse.isLoading &&
+      !allUsersResponse.isError
+    ) {
+      newUsersResponseArray = allUsersResponse.data as UserResponse[];
+
+      if (newUsersResponseArray.length > 0) {
+        newUsersResponseArray.forEach((user: UserResponse) => {
+          const newChatsId = user.chatsId.map((chat: string) => parseInt(chat));
+
+          newUsersArray.push({
+            ...user,
+            id: BigNumber.from(user.id).toNumber(),
+            chatsId: newChatsId,
+            darkColor: getDarkColor(),
+            lightColor: getLightColor()
+          });
+        });
+      }
+    }
+
+    setAllUsers(newUsersArray);
+  };
+
+  const setUserChatsArray = (): void => {
+    const newUserChats: ChatType[] = [];
+    let newChatsResponseArray: ChatResponse[] = [];
+
+    //   id: number;
+    //   chatName: string;
+    //   users: OtherUserType[];
+    //   messages: MessageType[];
+
+    if (
+      allUserChatsResponse.data &&
+      !allUserChatsResponse.isLoading &&
+      !allUserChatsResponse.isError
+    ) {
+      newChatsResponseArray = allUserChatsResponse.data as ChatResponse[];
+
+      if (newChatsResponseArray.length > 0) {
+        newChatsResponseArray.forEach((chat: ChatResponse) => {
+          const newUsers = allUsers.filter(({ id }: { id: number }) =>
+            chat.usersId.forEach((userId: string) => parseInt(userId) == id)
+          );
+
+          const newMessagesId = chat.messagesId.map((element: string) =>
+            parseInt(element)
+          );
+
+          newUserChats.push({
+            ...chat,
+            id: BigNumber.from(chat.id).toNumber(),
+            users: newUsers,
+            messagesId: newMessagesId
+          });
+        });
+      }
+    }
+
+    setUserChats(newUserChats);
+  };
+
+  const setCurrentUserArray = (): void => {
+    let newUser: UserType | null = null;
+
+    if (
+      currentUserResponse.data &&
+      !currentUserResponse.isLoading &&
+      !currentUserResponse.isError
+    ) {
+      const { id, username, userAddress } =
+        currentUserResponse.data as UserResponse;
+
+      newUser = {
+        id: BigNumber.from(id).toNumber(),
+        darkColor: getDarkColor(),
+        lightColor: getLightColor(),
+        chats: userChats,
+        username: username,
+        userAddress: userAddress
+      };
+    }
+
+    setCurrentUser(newUser);
+  };
+
+  const getDarkColor = (): string => {
+    let color = '#';
+
+    for (let i = 0; i < 6; i++) {
+      color += Math.floor(Math.random() * 10);
+    }
+
+    return color;
+  };
+
+  const getLightColor = (): string => {
+    const letters = 'BCDEF'.split('');
+    let color = '#';
+
+    for (let i = 0; i < 6; i++) {
+      color += letters[Math.floor(Math.random() * letters.length)];
+    }
+
+    return color;
+  };
+
+  return (
+    <Web3Context.Provider
+      value={{
+        currentUser,
+        userChats,
+        allUsers
+      }}
+    >
+      {children}
+    </Web3Context.Provider>
+  );
+};

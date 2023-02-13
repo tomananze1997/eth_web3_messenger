@@ -1,10 +1,12 @@
 import classNames from 'classnames';
 import type { FC } from 'react';
+import type { MessageResponse } from 'types';
 
-type MessageType = {
+type MessageTypes = {
+  message?: MessageResponse;
   isOwner?: boolean;
 };
-export const Message: FC<MessageType> = ({ isOwner = false }) => (
+export const Message: FC<MessageTypes> = ({ message, isOwner = false }) => (
   <>
     <div
       className={classNames(
@@ -13,10 +15,7 @@ export const Message: FC<MessageType> = ({ isOwner = false }) => (
         { 'mr-auto bg-blue-200  dark:bg-blue-700': !isOwner }
       )}
     >
-      Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aspernatur
-      ducimus, exercitationem expedita explicabo in inventore iure laborum
-      placeat possimus, quae quia quidem repellat reprehenderit. Consequuntur
-      doloribus error maiores minus obcaecati?
+      {message?.text}
     </div>
   </>
 );

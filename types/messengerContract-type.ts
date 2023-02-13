@@ -1,11 +1,11 @@
-import BN from 'bn.js';
-import BigNumber from 'bignumber.js';
-import {
+import type BigNumber from 'bignumber.js';
+import type BN from 'bn.js';
+import type {
+  EventData,
+  EventResponse,
   PromiEvent,
   TransactionReceipt,
-  EventResponse,
-  EventData,
-  Web3ContractContext,
+  Web3ContractContext
 } from 'ethereum-abi-types-generator';
 
 export interface CallOptions {
@@ -29,29 +29,36 @@ export interface EstimateGasOptions {
 
 export interface MethodPayableReturnContext {
   send(options: SendOptions): PromiEvent<TransactionReceipt>;
+
   send(
     options: SendOptions,
     callback: (error: Error, result: any) => void
   ): PromiEvent<TransactionReceipt>;
+
   estimateGas(options: EstimateGasOptions): Promise<number>;
+
   estimateGas(
     options: EstimateGasOptions,
     callback: (error: Error, result: any) => void
   ): Promise<number>;
+
   encodeABI(): string;
 }
 
 export interface MethodConstantReturnContext<TCallReturn> {
   call(): Promise<TCallReturn>;
+
   call(options: CallOptions): Promise<TCallReturn>;
+
   call(
     options: CallOptions,
     callback: (error: Error, result: TCallReturn) => void
   ): Promise<TCallReturn>;
+
   encodeABI(): string;
 }
 
-export interface MethodReturnContext extends MethodPayableReturnContext {}
+export type MethodReturnContext = MethodPayableReturnContext;
 
 export type ContractContext = Web3ContractContext<
   MessengerContractType,
@@ -65,6 +72,7 @@ export type MessengerContractTypeEvents =
   | 'UsersChanged'
   | 'newChatEvent'
   | 'newMessageEvent';
+
 export interface MessengerContractTypeEventsContext {
   ChatsChanged(
     parameters: {
@@ -75,6 +83,7 @@ export interface MessengerContractTypeEventsContext {
     },
     callback?: (error: Error, event: EventData) => void
   ): EventResponse;
+
   MessagesChanged(
     parameters: {
       filter?: {};
@@ -84,6 +93,7 @@ export interface MessengerContractTypeEventsContext {
     },
     callback?: (error: Error, event: EventData) => void
   ): EventResponse;
+
   UsersChanged(
     parameters: {
       filter?: {};
@@ -93,6 +103,7 @@ export interface MessengerContractTypeEventsContext {
     },
     callback?: (error: Error, event: EventData) => void
   ): EventResponse;
+
   newChatEvent(
     parameters: {
       filter?: {};
@@ -102,6 +113,7 @@ export interface MessengerContractTypeEventsContext {
     },
     callback?: (error: Error, event: EventData) => void
   ): EventResponse;
+
   newMessageEvent(
     parameters: {
       filter?: {};
@@ -112,6 +124,7 @@ export interface MessengerContractTypeEventsContext {
     callback?: (error: Error, event: EventData) => void
   ): EventResponse;
 }
+
 export type MessengerContractTypeMethodNames =
   | 'doesUserExist'
   | 'createUser'
@@ -126,34 +139,40 @@ export type MessengerContractTypeMethodNames =
   | 'changeMessage'
   | 'getAllMessagesInChat'
   | 'deleteMessage';
+
 export interface NewChatEventEventEmittedResponse {
   senderAddress: string;
   senderUsername: string;
   chatName: string;
 }
+
 export interface NewMessageEventEventEmittedResponse {
   senderAddress: string;
   senderUsername: string;
   message: string;
 }
+
 export interface UserResponse {
   id: string;
   chatsId: string[];
   username: string;
   userAddress: string;
 }
+
 export interface ChatResponse {
   id: string;
   chatName: string;
   usersId: string[];
   messagesId: string[];
 }
+
 export interface OwnerResponse {
   id: string;
   chatsId: string[];
   username: string;
   userAddress: string;
 }
+
 export interface MessageResponse {
   id: string;
   owner: OwnerResponse;
@@ -161,6 +180,7 @@ export interface MessageResponse {
   changedAt: string;
   isChanged: boolean;
 }
+
 export interface MessengerContractType {
   /**
    * Payable: false
@@ -169,6 +189,7 @@ export interface MessengerContractType {
    * Type: function
    */
   doesUserExist(): MethodConstantReturnContext<boolean>;
+
   /**
    * Payable: false
    * Constant: false
@@ -177,6 +198,7 @@ export interface MessengerContractType {
    * @param username Type: string, Indexed: false
    */
   createUser(username: string): MethodReturnContext;
+
   /**
    * Payable: false
    * Constant: true
@@ -184,6 +206,7 @@ export interface MessengerContractType {
    * Type: function
    */
   getAllUsers(): MethodConstantReturnContext<UserResponse[]>;
+
   /**
    * Payable: false
    * Constant: false
@@ -192,6 +215,7 @@ export interface MessengerContractType {
    * @param chatName Type: string, Indexed: false
    */
   createChat(chatName: string): MethodReturnContext;
+
   /**
    * Payable: false
    * Constant: false
@@ -201,6 +225,7 @@ export interface MessengerContractType {
    * @param newUsersId Type: uint256[], Indexed: false
    */
   addUsersToChat(chatId: string, newUsersId: string[]): MethodReturnContext;
+
   /**
    * Payable: false
    * Constant: true
@@ -209,6 +234,7 @@ export interface MessengerContractType {
    * @param chatId Type: uint256, Indexed: false
    */
   getChat(chatId: string): MethodConstantReturnContext<ChatResponse>;
+
   /**
    * Payable: false
    * Constant: true
@@ -216,6 +242,7 @@ export interface MessengerContractType {
    * Type: function
    */
   getAllUserChats(): MethodConstantReturnContext<ChatResponse[]>;
+
   /**
    * Payable: false
    * Constant: true
@@ -226,6 +253,7 @@ export interface MessengerContractType {
   getAllUsersInChat(
     chatId: string
   ): MethodConstantReturnContext<UserResponse[]>;
+
   /**
    * Payable: false
    * Constant: false
@@ -234,6 +262,7 @@ export interface MessengerContractType {
    * @param chatId Type: uint256, Indexed: false
    */
   leaveChat(chatId: string): MethodReturnContext;
+
   /**
    * Payable: false
    * Constant: false
@@ -243,6 +272,7 @@ export interface MessengerContractType {
    * @param text Type: string, Indexed: false
    */
   createMessage(chatId: string, text: string): MethodReturnContext;
+
   /**
    * Payable: false
    * Constant: false
@@ -252,6 +282,7 @@ export interface MessengerContractType {
    * @param text Type: string, Indexed: false
    */
   changeMessage(messageId: string, text: string): MethodReturnContext;
+
   /**
    * Payable: false
    * Constant: true
@@ -262,6 +293,7 @@ export interface MessengerContractType {
   getAllMessagesInChat(
     chatId: string
   ): MethodConstantReturnContext<MessageResponse[]>;
+
   /**
    * Payable: false
    * Constant: false

@@ -2,7 +2,11 @@ import { RainbowKitProvider, getDefaultWallets } from '@rainbow-me/rainbowkit';
 import '@rainbow-me/rainbowkit/styles.css';
 import { Layout } from 'components';
 import type { AppProps } from 'next/app';
-import { DarkModeProvider } from 'providers';
+import {
+  DarkModeProvider,
+  SelectedContentProvider,
+  Web3Provider
+} from 'providers';
 import 'styles/globals.css';
 import { WagmiConfig, configureChains, createClient, goerli } from 'wagmi';
 import { infuraProvider } from 'wagmi/providers/infura';
@@ -29,9 +33,13 @@ const App = ({ Component, pageProps }: AppProps) => {
       <DarkModeProvider>
         <WagmiConfig client={wagmiClient}>
           <RainbowKitProvider chains={chains}>
-            <Layout>
-              <Component {...pageProps} />
-            </Layout>
+            <Web3Provider>
+              <SelectedContentProvider>
+                <Layout>
+                  <Component {...pageProps} />
+                </Layout>
+              </SelectedContentProvider>
+            </Web3Provider>
           </RainbowKitProvider>
         </WagmiConfig>
       </DarkModeProvider>

@@ -30,7 +30,7 @@ export const Title: FC<TitleTypes> = ({
         <h1
           className={classNames(
             titleStyles,
-            'my-2 border-b border-neutral-400 text-2xl '
+            'my-2 border-b border-neutral-400 text-2xl'
           )}
         >
           Blockchain Messenger
