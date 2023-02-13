@@ -28,7 +28,10 @@ export const SelectedContent = () => {
             </div>
           ) : Object.hasOwn(activeContent, 'lightColor') ? (
             <div>
-              <FaUserAlt onClick={() => setActiveInfoContent(currentUser)} />
+              <FaUserAlt
+                className={'cursor-pointer'}
+                onClick={() => setActiveInfoContent(currentUser)}
+              />
               <h1 className={titleStyles}>Selected User info</h1>
               <h2 className={secondTitleStyles}>User username:</h2>
               <p className={'text-sm'}>{activeContent.username}</p>
@@ -37,7 +40,10 @@ export const SelectedContent = () => {
             </div>
           ) : (
             <div>
-              <FaUserAlt onClick={() => setActiveInfoContent(currentUser)} />
+              <FaUserAlt
+                className={'cursor-pointer'}
+                onClick={() => setActiveInfoContent(currentUser)}
+              />
               <h1 className={titleStyles}>Selected Chat info</h1>
               <h2 className={secondTitleStyles}>User username:</h2>
               <p className={'text-sm'}>{activeContent.username}</p>
