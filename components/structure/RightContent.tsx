@@ -6,7 +6,7 @@ import { contractClass } from 'const';
 import { useIsConnected } from 'hooks';
 import { useDarkModeContext } from 'providers';
 import type { ChangeEvent, FC, FormEvent } from 'react';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { FaSun } from 'react-icons/fa';
 import { MdDarkMode } from 'react-icons/md';
 import { useContractWrite, usePrepareContractWrite } from 'wagmi';
@@ -26,20 +26,13 @@ export const RightContent: FC = () => {
     args: [inputValue]
   });
 
-  const { write, error } = useContractWrite(config);
-
-  useEffect(() => {
-    error && alert(`username ${inputValue} is already taken!`);
-
-    setInputValue('');
-  }, [error]);
+  const { write } = useContractWrite(config);
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     write && write();
 
     setInputValue('');
-    // location.reload(); //todo implement rerender functionality in useEffect
   };
 
   return (

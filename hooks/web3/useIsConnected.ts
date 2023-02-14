@@ -12,9 +12,8 @@ export const useIsConnected = () => {
     overrides: { from: address }
   });
 
-  useEffect(() => {
-    !isLoading && console.log('Does user exist: ', data);
-  }, [address, data]);
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
+  useEffect(() => {}, [address, data]);
 
   return {
     currentUserAddress: address,

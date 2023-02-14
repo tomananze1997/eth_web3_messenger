@@ -9,7 +9,9 @@ type TitleTypes = {
 export const Title: FC<TitleTypes> = ({
   chatTitle = 'Choose/create new chat'
 }) => {
-  const titleStyles = 'p-1 text-xl font-bold';
+  const titleStyles =
+    'mx-auto m-1 p-1 text-center text-2xl font-bold xl:text-3xl';
+  const secondTitleStyles = 'ml-2 m-1 p-1 text-lg font-bold lg:text-xl';
   const { isConnected, userExists } = useIsConnected();
 
   chatTitle = isConnected
@@ -30,12 +32,12 @@ export const Title: FC<TitleTypes> = ({
         <h1
           className={classNames(
             titleStyles,
-            'my-2 border-b border-neutral-400 text-2xl'
+            'my-2 border-b border-neutral-400'
           )}
         >
           Blockchain Messenger
         </h1>
-        <h2 className={classNames(titleStyles)}>
+        <h2 className={classNames(secondTitleStyles)}>
           {useShortenedString(chatTitle, 22)}
         </h2>
       </div>

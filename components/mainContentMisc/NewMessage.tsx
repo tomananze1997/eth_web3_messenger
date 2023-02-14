@@ -1,16 +1,28 @@
-import classNames from 'classnames';
+import { contractClass } from 'const';
 import type { ChangeEvent, FC, FormEvent, KeyboardEvent } from 'react';
 import React, { useEffect, useRef, useState } from 'react';
 import { AiOutlineSend } from 'react-icons/ai';
+import { useContractWrite, usePrepareContractWrite } from 'wagmi';
 
 type NewMessageTypes = {
   scrollToBottom: () => void;
+  chatId?: number;
 };
 
-export const NewMessage: FC<NewMessageTypes> = ({ scrollToBottom }) => {
+export const NewMessage: FC<NewMessageTypes> = ({ scrollToBottom, chatId }) => {
   const [textareaValue, setTextareaValue] = useState<string>('');
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const formRef = useRef<HTMLFormElement>(null);
+
+  const { config } = usePrepareContractWrite({
+    address: chatId !== undefined ? contractClass.GOERLI_ADDRESS : undefined,
+    abi: contractClass.ABI,
+    functionName: contractClass.CREATE_MESSAGE,
+    enabled: chatId !== undefined,
+    args: [chatId, textareaValue]
+  });
+
+  const { write } = useContractWrite(config);
 
   useEffect(() => {
     if (textareaRef.current) {
@@ -34,11 +46,18 @@ export const NewMessage: FC<NewMessageTypes> = ({ scrollToBottom }) => {
     e.preventDefault();
     if (textareaValue === '') return;
 
+    write && write();
+
     setTextareaValue('');
   };
 
   const handleKeyPress = (e: KeyboardEvent<HTMLTextAreaElement>) => {
-    if (e.code == 'Enter' && !e.shiftKey) {
+    if (
+      e.code == 'Enter' &&
+      !e.shiftKey &&
+      textareaValue !== '' &&
+      chatId !== undefined
+    ) {
       e.preventDefault();
       handleSubmit(e);
     }
@@ -67,13 +86,10 @@ export const NewMessage: FC<NewMessageTypes> = ({ scrollToBottom }) => {
           }
         />
         <button
-          disabled={textareaValue === ''}
-          className={classNames(
-            'absolute bottom-0.5 right-2 -translate-y-2/4 text-xl text-black',
-            {
-              'text-blue-500': textareaValue !== ''
-            }
-          )}
+          disabled={textareaValue === '' || chatId === undefined}
+          className={
+            'absolute bottom-0.5 right-2 -translate-y-2/4 text-xl text-blue-500 disabled:text-black'
+          }
         >
           <AiOutlineSend />
         </button>

@@ -38,7 +38,10 @@ export const MainContent: FC = () => {
             'mx-6 my-2 flex h-4/5 flex-col rounded-xl p-1 shadow-2xl dark:bg-slate-800'
           }
         >
-          <div className={'snap-end overflow-y-auto'} ref={scrollSectionRef}>
+          <div
+            className={'snap-end overflow-y-auto overflow-x-visible px-3'}
+            ref={scrollSectionRef}
+          >
             {!isLoading && !isError && data && Array.isArray(data)
               ? data.map((message: MessageResponse) =>
                   message.owner.userAddress == currentUserAddress ? (
@@ -55,7 +58,10 @@ export const MainContent: FC = () => {
             <div ref={lastDivRef} />
           </div>
           <div className={'mt-auto '}>
-            <NewMessage scrollToBottom={scrollToBottom} />
+            <NewMessage
+              scrollToBottom={scrollToBottom}
+              chatId={activeChatContent?.id}
+            />
           </div>
         </div>
       </div>

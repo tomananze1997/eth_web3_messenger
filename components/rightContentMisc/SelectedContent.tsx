@@ -1,59 +1,62 @@
+import { ChatSelectedContent } from './ChatSelectedContent';
+import { OtherUserSelectedContent } from './OtherUserSelectedContent';
+import { UserSelectedContent } from './UserSelectedContent';
 import { useSelectedContent, useWeb3Provider } from 'providers';
-import { FaUserAlt } from 'react-icons/fa';
 import type { UserType } from 'types';
 
 export const SelectedContent = () => {
   const titleStyles =
-    'mx-auto m-1 p-1 text-center text-xl font-bold shadow-2xl';
-  const secondTitleStyles = 'ml-2 m-1 p-1 text-lg font-bold ';
-  const thirdTitleStyles = 'ml-2 m-1 p-1 text-base font-bold ';
-
-  const [currentUser] = useWeb3Provider();
+    'mx-auto m-1 p-1 text-center text-xl font-bold lg:text-2xl';
+  const secondTitleStyles = 'ml-2 m-1 p-1 text-lg font-bold lg:text-xl ';
+  const thirdTitleStyles = 'ml-2 m-1 p-1 text-base font-bold lg:text-lg';
+  const contentStyles =
+    'rounded-xl bg-blue-200 p-2 shadow-2xl dark:bg-slate-900';
+  const iconStyles =
+    'absolute top-1/2 -translate-y-1/2 text-sm text-black dark:text-blue-charcoal-50 sm:text-base lg:text-xl';
+  const textStyles = 'text-sm xl:text-base';
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [activeContent, _, setActiveInfoContent] = useSelectedContent();
+  const [currentUser, _, allUsers] = useWeb3Provider();
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [activeInfoContent, __, setActiveInfoContent] = useSelectedContent();
 
   return (
     <>
-      {activeContent ? (
-        <div className={'break-all '}>
-          {Object.hasOwn(activeContent, 'chats') &&
-          (activeContent as UserType).userAddress ===
+      {activeInfoContent ? (
+        <div className={'break-all'}>
+          {Object.hasOwn(activeInfoContent, 'chats') &&
+          (activeInfoContent as UserType).userAddress ===
             currentUser?.userAddress ? (
-            <div>
-              <h1 className={titleStyles}>Home</h1>
-              <h2 className={secondTitleStyles}>Your username:</h2>
-              <p className={'text-sm'}>{activeContent.username}</p>
-              <h2 className={secondTitleStyles}>Your address:</h2>
-              <span className={'text-sm'}>{activeContent.userAddress}</span>
-            </div>
-          ) : Object.hasOwn(activeContent, 'lightColor') ? (
-            <div>
-              <FaUserAlt
-                className={'cursor-pointer'}
-                onClick={() => setActiveInfoContent(currentUser)}
-              />
-              <h1 className={titleStyles}>Selected User info</h1>
-              <h2 className={secondTitleStyles}>User username:</h2>
-              <p className={'text-sm'}>{activeContent.username}</p>
-              <h2 className={secondTitleStyles}>User address:</h2>
-              <span className={'text-sm'}>{activeContent.userAddress}</span>
-            </div>
+            <UserSelectedContent
+              user={activeInfoContent}
+              titleStyles={titleStyles}
+              secondTitleStyles={secondTitleStyles}
+              contentStyles={contentStyles}
+              textStyles={textStyles}
+            />
+          ) : Object.hasOwn(activeInfoContent, 'lightColor') ? (
+            <OtherUserSelectedContent
+              user={activeInfoContent}
+              currentUser={currentUser}
+              titleStyles={titleStyles}
+              secondTitleStyles={secondTitleStyles}
+              setActiveInfoContent={setActiveInfoContent}
+              contentStyles={contentStyles}
+              iconStyles={iconStyles}
+              textStyles={textStyles}
+            />
           ) : (
-            <div>
-              <FaUserAlt
-                className={'cursor-pointer'}
-                onClick={() => setActiveInfoContent(currentUser)}
-              />
-              <h1 className={titleStyles}>Selected Chat info</h1>
-              <h2 className={secondTitleStyles}>User username:</h2>
-              <p className={'text-sm'}>{activeContent.username}</p>
-              <h2 className={thirdTitleStyles}>Number of users in chat:</h2>
-              <span className={'text-sm'}>{activeContent.usersId.length}</span>
-              <h2 className={thirdTitleStyles}>Number of messages in chat:</h2>
-              <span className={'text-sm'}>
-                {activeContent.messagesId.length}
-              </span>
-            </div>
+            <ChatSelectedContent
+              chat={activeInfoContent}
+              currentUser={currentUser}
+              allUsers={allUsers}
+              titleStyles={titleStyles}
+              secondTitleStyles={secondTitleStyles}
+              thirdTitleStyles={thirdTitleStyles}
+              setActiveInfoContent={setActiveInfoContent}
+              contentStyles={contentStyles}
+              iconStyles={iconStyles}
+              textStyles={textStyles}
+            />
           )}
         </div>
       ) : null}

@@ -33,7 +33,7 @@ export const ChatDiv: FC<ChatDivTypes> = ({ chat, otherStyles }) => {
               Messages:
               <span className={'font-bold'}>
                 {' '}
-                {chat.messagesId.length < 99 ? '99+' : '99+'}
+                {chat.messagesId.length < 99 ? chat.messagesId.length : '99+'}
               </span>
             </p>
           </div>

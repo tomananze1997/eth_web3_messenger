@@ -98,7 +98,9 @@ export const Web3Provider: FC<useWeb3ProviderTypes> = ({ children }) => {
 
       if (newUsersResponseArray.length > 0) {
         newUsersResponseArray.forEach((user: UserResponse) => {
-          const newChatsId = user.chatsId.map((chat: string) => parseInt(chat));
+          const newChatsId = user.chatsId.map((chat: string) =>
+            BigNumber.from(chat).toNumber()
+          );
 
           newUsersArray.push({
             ...user,
@@ -118,11 +120,6 @@ export const Web3Provider: FC<useWeb3ProviderTypes> = ({ children }) => {
     const newUserChats: ChatType[] = [];
     let newChatsResponseArray: ChatResponse[] = [];
 
-    //   id: number;
-    //   chatName: string;
-    //   users: OtherUserType[];
-    //   messages: MessageType[];
-
     if (
       allUserChatsResponse.data &&
       !allUserChatsResponse.isLoading &&
@@ -132,12 +129,18 @@ export const Web3Provider: FC<useWeb3ProviderTypes> = ({ children }) => {
 
       if (newChatsResponseArray.length > 0) {
         newChatsResponseArray.forEach((chat: ChatResponse) => {
-          const newUsers = allUsers.filter(({ id }: { id: number }) =>
-            chat.usersId.forEach((userId: string) => parseInt(userId) == id)
+          const newUsers: OtherUserType[] = [];
+
+          allUsers.forEach((user: OtherUserType) =>
+            chat.usersId.forEach((userId: string) => {
+              if (BigNumber.from(userId).toNumber() == user.id) {
+                newUsers.push(user);
+              }
+            })
           );
 
           const newMessagesId = chat.messagesId.map((element: string) =>
-            parseInt(element)
+            BigNumber.from(element).toNumber()
           );
 
           newUserChats.push({
