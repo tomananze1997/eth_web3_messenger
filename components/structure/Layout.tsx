@@ -11,7 +11,12 @@ export const Layout: FC<LayoutTypes> = ({ children }) => {
 
   return (
     <>
-      <main className={classNames({ dark: theme === 'dark' }, 'h-screen')}>
+      <main
+        className={classNames(
+          { dark: theme === 'dark' },
+          'h-screen overflow-hidden'
+        )}
+      >
         <div
           className={
             'flex h-full flex-col bg-blue-100 font-nunito text-blue-charcoal-900 dark:bg-slate-900 dark:text-blue-charcoal-50'

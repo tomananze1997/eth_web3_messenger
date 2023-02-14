@@ -1,5 +1,5 @@
 import classNames from 'classnames';
-import { UserIcon } from 'components';
+import { CustomButton, UserIcon } from 'components';
 import { contractClass } from 'const';
 import type {
   ChangeEvent,
@@ -33,20 +33,21 @@ export const NewChatModal: FC<NewChatModalTypes> = ({
     useState<OtherUserType[]>(allUsers);
   const [selectedUsers, setSelectedUsers] = useState<OtherUserType[]>([]);
   const [inputValue, setInputValue] = useState<string>('');
+  const [selectedUsersId, setSelectedUsersId] = useState<number[]>([]);
 
   const { config } = usePrepareContractWrite({
-    address:
-      selectedUsers.length > 0 ? contractClass.GOERLI_ADDRESS : undefined,
+    address: inputValue !== '' ? contractClass.GOERLI_ADDRESS : undefined,
     abi: contractClass.ABI,
     functionName: contractClass.CREATE_CHAT,
-    args: [inputValue]
+    args: [inputValue, selectedUsersId]
   });
 
   const { write } = useContractWrite(config);
 
-  const handleAddUser = (id: number) => {
+  const handleAddUser = (id: number): void => {
     let newAvailableUsers: OtherUserType[] = [];
     const newSelectedUsers: OtherUserType[] = selectedUsers;
+    const newSelectedUsersId: number[] = selectedUsersId;
 
     newAvailableUsers = availableUsers.filter(
       (user: OtherUserType) => user.id !== id
@@ -56,18 +57,27 @@ export const NewChatModal: FC<NewChatModalTypes> = ({
       (user: OtherUserType) => user.id === id
     );
 
-    selectedElement && newSelectedUsers.push(selectedElement);
+    if (selectedElement) {
+      newSelectedUsers.push(selectedElement);
+      newSelectedUsersId.push(selectedElement.id);
+    }
 
     setAvailableUsers(newAvailableUsers);
     setSelectedUsers(newSelectedUsers);
+    setSelectedUsersId(newSelectedUsersId);
   };
 
-  const handleRemoveUser = (id: number) => {
+  const handleRemoveUser = (id: number): void => {
     const newAvailableUsers: OtherUserType[] = [];
     let newSelectedUsers: OtherUserType[] = selectedUsers;
+    let newSelectedUsersId: number[] = selectedUsersId;
 
     newSelectedUsers = selectedUsers.filter(
       (user: OtherUserType) => user.id !== id
+    );
+
+    newSelectedUsersId = selectedUsersId.filter(
+      (userId: number) => userId !== id
     );
 
     const selectedElement = allUsers.find(
@@ -78,12 +88,17 @@ export const NewChatModal: FC<NewChatModalTypes> = ({
 
     setAvailableUsers(newAvailableUsers);
     setSelectedUsers(newSelectedUsers);
+    setSelectedUsersId(newSelectedUsersId);
   };
 
-  const handleClick = () => {
+  const handleClick = (): void => {
+    if (inputValue === '') return;
+
     write?.();
 
     setInputValue('');
+    setSelectedUsers([]);
+    setSelectedUsersId([]);
     setIsOpen(false);
   };
 
@@ -92,7 +107,7 @@ export const NewChatModal: FC<NewChatModalTypes> = ({
       <div
         ref={innerRef}
         className={classNames(
-          'fixed top-1/2 left-1/2 flex h-96 w-96 -translate-y-1/2 -translate-x-1/2 flex-col rounded-xl bg-white bg-slate-400 p-5 shadow-2xl shadow-black dark:bg-slate-900',
+          'fixed top-1/2 left-1/2 z-50 flex h-96 w-96 -translate-y-1/2 -translate-x-1/2 flex-col rounded-xl bg-white bg-slate-400 p-5 shadow-2xl shadow-black dark:bg-slate-900',
           {
             'hidden ': !isOpen
           }
@@ -114,11 +129,7 @@ export const NewChatModal: FC<NewChatModalTypes> = ({
         </div>
 
         <h2>Selected users:</h2>
-        <div
-          className={classNames(userAreaStyle, {
-            'border-2 border-red-500 ': selectedUsers.length === 0
-          })}
-        >
+        <div className={userAreaStyle}>
           {selectedUsers.map((user: OtherUserType) =>
             user.userAddress !== currentUser?.userAddress ? (
               <span key={user.id} onClick={() => handleRemoveUser(user.id)}>
@@ -139,15 +150,13 @@ export const NewChatModal: FC<NewChatModalTypes> = ({
             setInputValue(event.target.value)
           }
         />
-        <button
-          className={
-            'mx-auto mt-4 rounded-xl bg-green-300 py-1 px-2 font-bold hover:opacity-90 active:scale-95 active:opacity-80 disabled:opacity-50 dark:bg-green-700'
-          }
+        <CustomButton
+          disabled={inputValue === ''}
           onClick={handleClick}
-          disabled={inputValue === '' || selectedUsers.length === 0}
+          otherStyles={'bg-green-300 dark:bg-green-700'}
         >
           Create new chat
-        </button>
+        </CustomButton>
       </div>
     </>
   );

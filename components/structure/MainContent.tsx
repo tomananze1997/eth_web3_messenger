@@ -1,4 +1,4 @@
-import { Message, NewMessage, Title } from 'components';
+import { DeletedMessage, Message, NewMessage, Title } from 'components';
 import { contractClass } from 'const';
 import { useIsConnected } from 'hooks';
 import { useSelectedContent } from 'providers';
@@ -39,17 +39,22 @@ export const MainContent: FC = () => {
           }
         >
           <div
-            className={'snap-end overflow-y-auto overflow-x-visible px-3'}
+            className={'snap-end overflow-y-auto px-3'}
             ref={scrollSectionRef}
           >
             {!isLoading && !isError && data && Array.isArray(data)
-              ? data.map((message: MessageResponse) =>
-                  message.owner.userAddress == currentUserAddress ? (
+              ? data.map((message: MessageResponse, index: number) =>
+                  message.owner.userAddress === currentUserAddress ? (
                     <Message
                       key={message.id}
                       isOwner={true}
                       message={message}
                     />
+                  ) : message.owner.userAddress ===
+                    '0x0000000000000000000000000000000000000000' ? (
+                    <>
+                      <DeletedMessage key={index} />
+                    </>
                   ) : (
                     <Message key={message.id} message={message} />
                   )

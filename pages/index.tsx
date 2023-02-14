@@ -26,6 +26,10 @@ const Home: NextPage = () => {
       setRightActive(true);
       setLeftActive(false);
     }
+    if (isConnected && userExists) {
+      setRightActive(false);
+      setLeftActive(false);
+    }
   }, [isConnected, userExists]);
 
   const handleLeftClick = (): void => {

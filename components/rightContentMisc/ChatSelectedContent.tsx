@@ -1,18 +1,17 @@
 import { AddUsersToChatModal } from './AddUsersToChatModal';
 import { IconButton, Tooltip } from '@mui/material';
-import classNames from 'classnames';
-import { UserIcon } from 'components';
+import { CustomButton, UserIcon } from 'components';
 import { contractClass } from 'const';
 import { useOnClickOutside } from 'hooks';
 import type { FC, SetStateAction } from 'react';
 import type { Dispatch } from 'react';
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { FaUserAlt } from 'react-icons/fa';
 import type { ChatType, OtherUserType, UserType } from 'types';
 import { useContractWrite, usePrepareContractWrite } from 'wagmi';
 
 type ChatSelectedContentTypes = {
-  chat: OtherUserType | UserType | ChatType;
+  chat: ChatType;
   currentUser: UserType | null;
   allUsers: OtherUserType[];
   titleStyles: string;
@@ -38,23 +37,17 @@ export const ChatSelectedContent: FC<ChatSelectedContentTypes> = ({
   textStyles,
   setActiveInfoContent
 }) => {
-  const buttonStyle =
-    'mx-auto mt-4 rounded-xl py-1 px-2 font-bold hover:opacity-90 active:scale-95 active:opacity-80 disabled:opacity-50';
-  const availableUsers: OtherUserType[] = [];
+  const availableUsers: OtherUserType[] = useMemo(() => [], []);
 
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const addUsersModalRef = useRef<HTMLDivElement>(null);
   useOnClickOutside(addUsersModalRef, () => setIsModalOpen(false));
 
   const { config } = usePrepareContractWrite({
-    address: contractClass.GOERLI_ADDRESS,
-
+    address: chat.id ? contractClass.GOERLI_ADDRESS : undefined,
     abi: contractClass.ABI,
     functionName: contractClass.LEAVE_CHAT,
-    args: [chat?.id],
-    onError(error) {
-      alert(error);
-    }
+    args: [chat?.id]
   });
 
   const { write } = useContractWrite(config);
@@ -65,7 +58,7 @@ export const ChatSelectedContent: FC<ChatSelectedContentTypes> = ({
         (chatUser: OtherUserType) => chatUser.id === user.id
       );
 
-      const isCurrentUser: boolean = currentUser.id === user.id;
+      const isCurrentUser: boolean = currentUser?.id === user.id;
 
       const isUserAlreadyInArray: boolean = availableUsers.some(
         (availableUsers: OtherUserType) => availableUsers.id === user.id
@@ -75,7 +68,7 @@ export const ChatSelectedContent: FC<ChatSelectedContentTypes> = ({
         availableUsers.push(user);
       }
     });
-  }, [allUsers, availableUsers, chat.users, currentUser.id]);
+  }, [allUsers, availableUsers, chat.users, currentUser?.id]);
 
   useEffect(() => {
     prepareAvailableUsersArray();
@@ -111,12 +104,12 @@ export const ChatSelectedContent: FC<ChatSelectedContentTypes> = ({
             <UserIcon key={user.id} user={user} otherStyles={'m-1'} />
           ))}
         </div>
-        <button
+        <CustomButton
           onClick={() => setIsModalOpen(!isModalOpen)}
-          className={classNames(buttonStyle, 'bg-green-300 dark:bg-green-700')}
+          otherStyles={'bg-green-300 dark:bg-green-700'}
         >
           Add users
-        </button>
+        </CustomButton>
         <AddUsersToChatModal
           innerRef={addUsersModalRef}
           isOpen={isModalOpen}
@@ -124,12 +117,12 @@ export const ChatSelectedContent: FC<ChatSelectedContentTypes> = ({
           otherUsers={availableUsers}
           chatId={chat.id}
         />
-        <button
+        <CustomButton
           onClick={() => write?.()}
-          className={classNames(buttonStyle, ' bg-red-300 dark:bg-red-700')}
+          otherStyles={'bg-red-300 dark:bg-red-700'}
         >
           Leave chat
-        </button>
+        </CustomButton>
       </div>
     </>
   );

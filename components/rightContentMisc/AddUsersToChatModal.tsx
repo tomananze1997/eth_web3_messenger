@@ -1,5 +1,5 @@
 import classNames from 'classnames';
-import { UserIcon } from 'components';
+import { CustomButton, UserIcon } from 'components';
 import { contractClass } from 'const';
 import type { Dispatch, FC, LegacyRef, SetStateAction } from 'react';
 import { useState } from 'react';
@@ -31,7 +31,9 @@ export const AddUsersToChatModal: FC<AddUsersToChatModalTypes> = ({
 
   const { config } = usePrepareContractWrite({
     address:
-      selectedUsersId.length > 0 ? contractClass.GOERLI_ADDRESS : undefined,
+      chatId && selectedUsersId.length > 0
+        ? contractClass.GOERLI_ADDRESS
+        : undefined,
     abi: contractClass.ABI,
     functionName: contractClass.ADD_USERS_TO_CHAT,
     args: [chatId, selectedUsersId]
@@ -86,7 +88,9 @@ export const AddUsersToChatModal: FC<AddUsersToChatModalTypes> = ({
     setSelectedUsersId(newSelectedUsersId);
   };
 
-  const handleClick = () => {
+  const handleClick = (): void => {
+    if (!chatId && selectedUsersId.length === 0) return;
+
     write?.();
 
     setSelectedUsers([]);
@@ -99,7 +103,7 @@ export const AddUsersToChatModal: FC<AddUsersToChatModalTypes> = ({
       <div
         ref={innerRef}
         className={classNames(
-          'fixed top-1/2 left-1/2 flex h-96 w-96 -translate-y-1/2 -translate-x-1/2 flex-col rounded-xl bg-white bg-slate-400 p-5 shadow-2xl shadow-black dark:bg-slate-900',
+          'fixed top-1/2 left-1/2 z-50 flex h-96 w-96 -translate-y-1/2 -translate-x-1/2 flex-col rounded-xl bg-white bg-slate-400 p-5 shadow-2xl shadow-black dark:bg-slate-900',
           {
             'hidden ': !isOpen
           }
@@ -130,16 +134,13 @@ export const AddUsersToChatModal: FC<AddUsersToChatModalTypes> = ({
             </span>
           ))}
         </div>
-
-        <button
-          className={
-            'mx-auto mt-4 rounded-xl bg-green-300 py-1 px-2 font-bold hover:opacity-90 active:scale-95 active:opacity-80 disabled:opacity-50 dark:bg-green-700'
-          }
+        <CustomButton
           onClick={handleClick}
           disabled={selectedUsersId.length === 0}
+          otherStyles={'bg-green-300 dark:bg-green-700'}
         >
           Add users to chat
-        </button>
+        </CustomButton>
       </div>
     </>
   );

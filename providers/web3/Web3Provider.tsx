@@ -30,7 +30,7 @@ export const Web3Provider: FC<useWeb3ProviderTypes> = ({ children }) => {
     address:
       isConnected && userExists ? contractClass.GOERLI_ADDRESS : undefined,
     abi: contractClass.ABI,
-    enabled: true,
+    enabled: isConnected && userExists,
     functionName: contractClass.GET_CURRENT_USER,
     overrides: { from: currentUserAddress }
   });
@@ -39,7 +39,7 @@ export const Web3Provider: FC<useWeb3ProviderTypes> = ({ children }) => {
     address:
       isConnected && userExists ? contractClass.GOERLI_ADDRESS : undefined,
     abi: contractClass.ABI,
-    enabled: true,
+    enabled: isConnected && userExists,
     functionName: contractClass.GET_ALL_USERS,
     overrides: { from: currentUserAddress }
   });
@@ -48,7 +48,7 @@ export const Web3Provider: FC<useWeb3ProviderTypes> = ({ children }) => {
     address:
       isConnected && userExists ? contractClass.GOERLI_ADDRESS : undefined,
     abi: contractClass.ABI,
-    enabled: true,
+    enabled: isConnected && userExists,
     functionName: contractClass.GET_ALL_USER_CHATS,
     overrides: { from: currentUserAddress }
   });

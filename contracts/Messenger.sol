@@ -97,10 +97,11 @@ contract Messenger {
 
     //CHAT==============================================
 
-    function createChat(string memory chatName) external {
+    function createChat(string memory chatName, uint256[] memory newUsersId) external {
         require(bytes(chatName).length != 0, 'Text should exist!');
         require(!_isChatNameTaken[chatName], 'This chat name is already taken');
 
+        //Add sender to chat
         uint256 senderId = _getUserIdByAddress();
 
         _chatArray.push(
@@ -117,9 +118,40 @@ contract Messenger {
 
         _isChatNameTaken[chatName] = true;
 
+        //Add newUsersId to chat
+
+        //check if newUserId array is valid
+        for (uint256 i = 0; i < newUsersId.length; i++) {
+            bool isUserFound = false;
+
+            for (uint256 j = 0; j < _userArray.length; j++) {
+                if (newUsersId[i] == _userArray[j].id) {
+                    isUserFound = true;
+                }
+            }
+
+            require(isUserFound, 'User id is not found!');
+            isUserFound = false;
+        }
+
+        //Actually add user to chat
+        for (uint256 i = 0; i < newUsersId.length; i++) {
+            bool isUserInChat = _isIndexInArray(
+                _chatArray[_numberOfChats].usersId,
+                newUsersId[i]
+            );
+
+            if (!isUserInChat) {
+                _chatArray[_numberOfChats].usersId.push(newUsersId[i]);
+                _userArray[newUsersId[i]].chatsId.push(_numberOfChats);
+            }
+        }
+
+
         _numberOfChats++;
 
         emit ChatsChanged();
+        emit UsersChanged();
     }
 
     function addUsersToChat(uint256 chatId, uint256[] memory newUsersId)
@@ -175,18 +207,6 @@ contract Messenger {
         );
     }
 
-    function getChat(uint256 chatId) external view returns (Chat memory) {
-        uint256 senderId = _getUserIdByAddress();
-
-        require(_chatArray.length > chatId, 'Chat does not exist!');
-        require(
-            _isIndexInArray(_chatArray[chatId].usersId, senderId),
-            'Sender must be must be in chat, or chat was deleted!'
-        );
-
-        return _chatArray[chatId];
-    }
-
     function getAllUserChats() external view returns (Chat[] memory) {
         uint256 senderId = _getUserIdByAddress();
 
@@ -201,37 +221,6 @@ contract Messenger {
         }
 
         return newUserChats;
-    }
-
-    function getAllUsersInChat(uint256 chatId)
-    external
-    view
-    returns (User[] memory)
-    {
-        uint256 senderId = _getUserIdByAddress();
-
-        require(_chatArray.length > chatId, 'Chat does not exist!');
-        require(
-            _isIndexInArray(_chatArray[chatId].usersId, senderId),
-            'Sender must be must be in chat!'
-        );
-
-        User[] memory newUsers = new User[](_chatArray[chatId].usersId.length);
-        uint256 userIdx;
-
-        for (uint256 i = 0; i < _userArray.length; i++) {
-            bool isUserInChat = _isIndexInArray(
-                _chatArray[chatId].usersId,
-                _userArray[i].id
-            );
-
-            if (isUserInChat) {
-                newUsers[userIdx] = _userArray[i];
-                userIdx++;
-            }
-        }
-
-        return newUsers;
     }
 
     function leaveChat(uint256 chatId) external {

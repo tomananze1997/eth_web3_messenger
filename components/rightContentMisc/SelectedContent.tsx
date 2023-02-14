@@ -2,9 +2,12 @@ import { ChatSelectedContent } from './ChatSelectedContent';
 import { OtherUserSelectedContent } from './OtherUserSelectedContent';
 import { UserSelectedContent } from './UserSelectedContent';
 import { useSelectedContent, useWeb3Provider } from 'providers';
+import type { FC } from 'react';
 import type { UserType } from 'types';
+import type { OtherUserType } from 'types';
+import type { ChatType } from 'types';
 
-export const SelectedContent = () => {
+export const SelectedContent: FC = () => {
   const titleStyles =
     'mx-auto m-1 p-1 text-center text-xl font-bold lg:text-2xl';
   const secondTitleStyles = 'ml-2 m-1 p-1 text-lg font-bold lg:text-xl ';
@@ -27,7 +30,7 @@ export const SelectedContent = () => {
           (activeInfoContent as UserType).userAddress ===
             currentUser?.userAddress ? (
             <UserSelectedContent
-              user={activeInfoContent}
+              user={activeInfoContent as UserType}
               titleStyles={titleStyles}
               secondTitleStyles={secondTitleStyles}
               contentStyles={contentStyles}
@@ -35,7 +38,7 @@ export const SelectedContent = () => {
             />
           ) : Object.hasOwn(activeInfoContent, 'lightColor') ? (
             <OtherUserSelectedContent
-              user={activeInfoContent}
+              user={activeInfoContent as OtherUserType}
               currentUser={currentUser}
               titleStyles={titleStyles}
               secondTitleStyles={secondTitleStyles}
@@ -46,7 +49,7 @@ export const SelectedContent = () => {
             />
           ) : (
             <ChatSelectedContent
-              chat={activeInfoContent}
+              chat={activeInfoContent as ChatType}
               currentUser={currentUser}
               allUsers={allUsers}
               titleStyles={titleStyles}

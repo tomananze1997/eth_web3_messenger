@@ -1,8 +1,8 @@
 import type { FC } from 'react';
-import type { ChatType, OtherUserType, UserType } from 'types';
+import type { UserType } from 'types';
 
 type UserSelectedContentTypes = {
-  user: OtherUserType | UserType | ChatType;
+  user: UserType;
   titleStyles: string;
   secondTitleStyles: string;
   contentStyles: string;

@@ -79,7 +79,8 @@ export const contractClass = {
         }
       ],
       stateMutability: 'view',
-      type: 'function'
+      type: 'function',
+      constant: true
     },
     {
       inputs: [
@@ -127,7 +128,8 @@ export const contractClass = {
         }
       ],
       stateMutability: 'view',
-      type: 'function'
+      type: 'function',
+      constant: true
     },
     {
       inputs: [],
@@ -162,7 +164,8 @@ export const contractClass = {
         }
       ],
       stateMutability: 'view',
-      type: 'function'
+      type: 'function',
+      constant: true
     },
     {
       inputs: [
@@ -170,6 +173,11 @@ export const contractClass = {
           internalType: 'string',
           name: 'chatName',
           type: 'string'
+        },
+        {
+          internalType: 'uint256[]',
+          name: 'newUsersId',
+          type: 'uint256[]'
         }
       ],
       name: 'createChat',
@@ -193,47 +201,6 @@ export const contractClass = {
       name: 'addUsersToChat',
       outputs: [],
       stateMutability: 'nonpayable',
-      type: 'function'
-    },
-    {
-      inputs: [
-        {
-          internalType: 'uint256',
-          name: 'chatId',
-          type: 'uint256'
-        }
-      ],
-      name: 'getChat',
-      outputs: [
-        {
-          components: [
-            {
-              internalType: 'uint256',
-              name: 'id',
-              type: 'uint256'
-            },
-            {
-              internalType: 'string',
-              name: 'chatName',
-              type: 'string'
-            },
-            {
-              internalType: 'uint256[]',
-              name: 'usersId',
-              type: 'uint256[]'
-            },
-            {
-              internalType: 'uint256[]',
-              name: 'messagesId',
-              type: 'uint256[]'
-            }
-          ],
-          internalType: 'struct Messenger.Chat',
-          name: '',
-          type: 'tuple'
-        }
-      ],
-      stateMutability: 'view',
       type: 'function'
     },
     {
@@ -269,48 +236,8 @@ export const contractClass = {
         }
       ],
       stateMutability: 'view',
-      type: 'function'
-    },
-    {
-      inputs: [
-        {
-          internalType: 'uint256',
-          name: 'chatId',
-          type: 'uint256'
-        }
-      ],
-      name: 'getAllUsersInChat',
-      outputs: [
-        {
-          components: [
-            {
-              internalType: 'uint256',
-              name: 'id',
-              type: 'uint256'
-            },
-            {
-              internalType: 'uint256[]',
-              name: 'chatsId',
-              type: 'uint256[]'
-            },
-            {
-              internalType: 'string',
-              name: 'username',
-              type: 'string'
-            },
-            {
-              internalType: 'address',
-              name: 'userAddress',
-              type: 'address'
-            }
-          ],
-          internalType: 'struct Messenger.User[]',
-          name: '',
-          type: 'tuple[]'
-        }
-      ],
-      stateMutability: 'view',
-      type: 'function'
+      type: 'function',
+      constant: true
     },
     {
       inputs: [
@@ -427,7 +354,8 @@ export const contractClass = {
         }
       ],
       stateMutability: 'view',
-      type: 'function'
+      type: 'function',
+      constant: true
     },
     {
       inputs: [
@@ -443,8 +371,8 @@ export const contractClass = {
       type: 'function'
     }
   ],
-  GANACHE_ADDRESS: '0xB5c9212b26963f1C2ad23e110c2e6f3E544B49e4',
-  GOERLI_ADDRESS: '0xadf2E690cf225C3f564EB8D10Eda777D9c85e3BB',
+  GANACHE_ADDRESS: '',
+  GOERLI_ADDRESS: '0x13FAEFD69F3498e4Cb92e0f2abe7a33b4390B4DE',
 
   //EVENTS
   USERS_CHANGED: 'UsersChanged',
@@ -462,9 +390,7 @@ export const contractClass = {
   //CHATS
   CREATE_CHAT: 'createChat',
   ADD_USERS_TO_CHAT: 'addUsersToChat',
-  GET_CHAT: 'getChat',
   GET_ALL_USER_CHATS: 'getAllUserChats',
-  GET_ALL_USERS_IN_CHAT: 'getAllUsersInChat',
   LEAVE_CHAT: 'leaveChat',
 
   //MESSAGES

@@ -1,7 +1,7 @@
 import Switch from '@mui/material/Switch';
 import { ConnectButton } from '@rainbow-me/rainbowkit';
 import classNames from 'classnames';
-import { SelectedContent } from 'components';
+import { CustomButton, SelectedContent } from 'components';
 import { contractClass } from 'const';
 import { useIsConnected } from 'hooks';
 import { useDarkModeContext } from 'providers';
@@ -22,7 +22,7 @@ export const RightContent: FC = () => {
       isConnected && !userExists ? contractClass.GOERLI_ADDRESS : undefined,
     abi: contractClass.ABI,
     functionName: contractClass.CREATE_USER,
-    enabled: !userExists,
+    enabled: isConnected && !userExists,
     args: [inputValue]
   });
 
@@ -30,6 +30,8 @@ export const RightContent: FC = () => {
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    if (inputValue === '') return;
+
     write && write();
 
     setInputValue('');
@@ -81,13 +83,13 @@ export const RightContent: FC = () => {
             <>
               {!userExists ? (
                 <form
-                  className={'relative mx-auto flex w-4/5 flex-col pt-20'}
+                  className={'relative mx-auto flex w-4/5 flex-col pt-40'}
                   onSubmit={handleSubmit}
                 >
                   {inputValue === '' && (
                     <span
                       className={
-                        'absolute top-2 left-2 text-center text-red-500'
+                        'absolute bottom-24 left-2 text-center text-red-500'
                       }
                     >
                       You must choose your username, before using Blockchain
@@ -106,14 +108,12 @@ export const RightContent: FC = () => {
                       { 'border-2 border-red-500 ': inputValue === '' }
                     )}
                   />
-                  <button
+                  <CustomButton
                     disabled={inputValue === ''}
-                    className={
-                      'mx-auto mt-4 rounded-xl bg-red-500 py-1 px-2 font-bold hover:opacity-90 active:scale-95 active:opacity-80 disabled:opacity-50'
-                    }
+                    otherStyles={'bg-red-500'}
                   >
                     Submit Username
-                  </button>
+                  </CustomButton>
                 </form>
               ) : (
                 <SelectedContent />

@@ -5,7 +5,7 @@ import { FaUserAlt } from 'react-icons/fa';
 import type { ChatType, OtherUserType, UserType } from 'types';
 
 type OtherUserSelectedContentTypes = {
-  user: OtherUserType | UserType | ChatType;
+  user: OtherUserType;
   currentUser: UserType | null;
   titleStyles: string;
   secondTitleStyles: string;

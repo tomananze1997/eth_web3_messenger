@@ -1,3 +1,4 @@
+import { CustomButton } from 'components';
 import { contractClass } from 'const';
 import type { ChangeEvent, FC, FormEvent, KeyboardEvent } from 'react';
 import React, { useEffect, useRef, useState } from 'react';
@@ -38,7 +39,7 @@ export const NewMessage: FC<NewMessageTypes> = ({ scrollToBottom, chatId }) => {
         textareaRef.current.style.height = 148 + 'px';
       }
     }
-  }, [textareaRef, textareaValue]);
+  }, [textareaRef, textareaValue, scrollToBottom]);
 
   const handleSubmit = (
     e: FormEvent<HTMLFormElement> | KeyboardEvent<HTMLTextAreaElement>
@@ -85,14 +86,15 @@ export const NewMessage: FC<NewMessageTypes> = ({ scrollToBottom, chatId }) => {
             handleKeyPress(event)
           }
         />
-        <button
+        <CustomButton
           disabled={textareaValue === '' || chatId === undefined}
-          className={
+          overwriteStyles={true}
+          otherStyles={
             'absolute bottom-0.5 right-2 -translate-y-2/4 text-xl text-blue-500 disabled:text-black'
           }
         >
           <AiOutlineSend />
-        </button>
+        </CustomButton>
       </form>
     </>
   );
