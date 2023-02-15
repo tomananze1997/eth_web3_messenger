@@ -22,7 +22,6 @@ export const Web3Provider: FC<useWeb3ProviderTypes> = ({ children }) => {
   const [currentUser, setCurrentUser] = useState<UserType | null>(null);
   const [userChats, setUserChats] = useState<ChatType[]>([]);
   const [allUsers, setAllUsers] = useState<OtherUserType[]>([]);
-  const [valueForRefresh, setValueForRefresh] = useState<number>(0);
 
   const { currentUserAddress, isConnected, userExists } = useIsConnected();
 
@@ -54,20 +53,26 @@ export const Web3Provider: FC<useWeb3ProviderTypes> = ({ children }) => {
   });
 
   useContractEvent({
-    address: isConnected ? contractClass.GOERLI_ADDRESS : undefined,
+    address:
+      isConnected && userExists ? contractClass.GOERLI_ADDRESS : undefined,
     abi: contractClass.ABI,
     eventName: contractClass.USERS_CHANGED,
     listener() {
-      setValueForRefresh(valueForRefresh + 1);
+      currentUserResponse.refetch();
+      allUsersResponse.refetch();
+      allUserChatsResponse.refetch();
     }
   });
 
   useContractEvent({
-    address: isConnected ? contractClass.GOERLI_ADDRESS : undefined,
+    address:
+      isConnected && userExists ? contractClass.GOERLI_ADDRESS : undefined,
     abi: contractClass.ABI,
     eventName: contractClass.CHATS_CHANGED,
     listener() {
-      setValueForRefresh(valueForRefresh + 1);
+      currentUserResponse.refetch();
+      allUsersResponse.refetch();
+      allUserChatsResponse.refetch();
     }
   });
 
@@ -76,13 +81,16 @@ export const Web3Provider: FC<useWeb3ProviderTypes> = ({ children }) => {
       setAllUsersArray();
       setUserChatsArray(); //must be behind setAllUsersArray!!
       setCurrentUserArray(); //must be behind setUserChatsArray!!
+    } else {
+      setCurrentUser(null);
+      setUserChats([]);
+      setAllUsers([]);
     }
   }, [
     currentUserResponse.data,
     allUsersResponse.data,
     allUserChatsResponse.data,
-    currentUserAddress,
-    valueForRefresh
+    currentUserAddress
   ]);
 
   const setAllUsersArray = (): void => {

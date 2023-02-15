@@ -3,21 +3,22 @@ import { useEffect } from 'react';
 import { useAccount, useContractRead } from 'wagmi';
 
 export const useIsConnected = () => {
-  const { address, isDisconnected } = useAccount();
+  const { address, isConnecting, isDisconnected } = useAccount();
 
-  const { data, isLoading } = useContractRead({
+  const { data, isLoading, refetch } = useContractRead({
     address: !isDisconnected ? contractClass.GOERLI_ADDRESS : undefined,
     abi: contractClass.ABI,
     functionName: contractClass.DOES_USER_EXIST,
     overrides: { from: address }
   });
 
-  // eslint-disable-next-line @typescript-eslint/no-empty-function
-  useEffect(() => {}, [address, data]);
+  useEffect(() => {
+    refetch();
+  }, [address]);
 
   return {
     currentUserAddress: address,
-    isConnected: !isDisconnected,
+    isConnected: !isDisconnected && !isConnecting,
     userExists: data === true && !isLoading
   };
 };

@@ -23,7 +23,7 @@ const App = ({ Component, pageProps }: AppProps) => {
   });
 
   const wagmiClient = createClient({
-    autoConnect: true,
+    autoConnect: false,
     connectors,
     provider
   });

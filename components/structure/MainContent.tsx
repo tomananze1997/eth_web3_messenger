@@ -5,7 +5,7 @@ import { useSelectedContent } from 'providers';
 import type { FC } from 'react';
 import { useRef } from 'react';
 import type { MessageResponse } from 'types';
-import { useContractRead } from 'wagmi';
+import { useContractEvent, useContractRead } from 'wagmi';
 
 export const MainContent: FC = () => {
   const lastDivRef = useRef<HTMLDivElement>(null);
@@ -15,12 +15,21 @@ export const MainContent: FC = () => {
   const [_, activeChatContent] = useSelectedContent();
   const { currentUserAddress } = useIsConnected();
 
-  const { data, isLoading, isError } = useContractRead({
+  const { data, isLoading, isError, refetch } = useContractRead({
     address: activeChatContent ? contractClass.GOERLI_ADDRESS : undefined,
     abi: contractClass.ABI,
     functionName: contractClass.GET_ALL_MESSAGES_IN_CHAT,
     args: [activeChatContent?.id],
     overrides: { from: currentUserAddress }
+  });
+
+  useContractEvent({
+    address: activeChatContent ? contractClass.GOERLI_ADDRESS : undefined,
+    abi: contractClass.ABI,
+    eventName: contractClass.MESSAGES_CHANGED,
+    listener() {
+      refetch();
+    }
   });
 
   const scrollToBottom = (): void => {
