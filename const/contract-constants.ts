@@ -19,56 +19,6 @@ export const contractClass = {
       type: 'event'
     },
     {
-      anonymous: false,
-      inputs: [
-        {
-          indexed: false,
-          internalType: 'address',
-          name: 'senderAddress',
-          type: 'address'
-        },
-        {
-          indexed: false,
-          internalType: 'string',
-          name: 'senderUsername',
-          type: 'string'
-        },
-        {
-          indexed: false,
-          internalType: 'string',
-          name: 'chatName',
-          type: 'string'
-        }
-      ],
-      name: 'newChatEvent',
-      type: 'event'
-    },
-    {
-      anonymous: false,
-      inputs: [
-        {
-          indexed: false,
-          internalType: 'address',
-          name: 'senderAddress',
-          type: 'address'
-        },
-        {
-          indexed: false,
-          internalType: 'string',
-          name: 'senderUsername',
-          type: 'string'
-        },
-        {
-          indexed: false,
-          internalType: 'string',
-          name: 'message',
-          type: 'string'
-        }
-      ],
-      name: 'newMessageEvent',
-      type: 'event'
-    },
-    {
       inputs: [],
       name: 'doesUserExist',
       outputs: [
@@ -372,14 +322,12 @@ export const contractClass = {
     }
   ],
   GANACHE_ADDRESS: '',
-  GOERLI_ADDRESS: '0x13FAEFD69F3498e4Cb92e0f2abe7a33b4390B4DE',
+  GOERLI_ADDRESS: '0x359f571B2209E5c0292284B1Fedbb951113304E5',
 
   //EVENTS
   USERS_CHANGED: 'UsersChanged',
   CHATS_CHANGED: 'ChatsChanged',
   MESSAGES_CHANGED: 'MessagesChanged',
-  NEW_MESSAGE_EVENT: 'newMessageEvent',
-  NEW_CHAT_EVENT: 'newChatEvent',
 
   //USERS
   DOES_USER_EXIST: 'doesUserExist',

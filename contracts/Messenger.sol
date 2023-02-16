@@ -41,17 +41,6 @@ contract Messenger {
     event ChatsChanged();
     event MessagesChanged();
 
-    event newMessageEvent(
-        address senderAddress,
-        string senderUsername,
-        string message
-    );
-    event newChatEvent(
-        address senderAddress,
-        string senderUsername,
-        string chatName
-    );
-
     //USER==============================================
 
     function doesUserExist() public view returns (bool) {
@@ -200,11 +189,6 @@ contract Messenger {
 
         emit UsersChanged();
         emit ChatsChanged();
-        emit newChatEvent(
-            msg.sender,
-            _userArray[senderId].username,
-            _chatArray[chatId].chatName
-        );
     }
 
     function getAllUserChats() external view returns (Chat[] memory) {
@@ -304,7 +288,6 @@ contract Messenger {
 
         emit ChatsChanged();
         emit MessagesChanged();
-        emit newMessageEvent(msg.sender, _userArray[senderId].username, text);
     }
 
     function changeMessage(uint256 messageId, string memory text) external {
