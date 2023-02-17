@@ -1,5 +1,4 @@
 import { ChangeMessageModal } from './ChangeMessageModal';
-import { IconButton, Tooltip } from '@mui/material';
 import classNames from 'classnames';
 import { contractClass } from 'const';
 import { BigNumber } from 'ethers';
@@ -7,6 +6,7 @@ import { useShortenedString } from 'hooks';
 import type { FC } from 'react';
 import { useRef, useState } from 'react';
 import { AiFillDelete, AiOutlineMessage } from 'react-icons/ai';
+import { Tooltip } from 'react-tooltip';
 import type { MessageResponse } from 'types';
 import { useContractWrite, usePrepareContractWrite } from 'wagmi';
 
@@ -18,9 +18,11 @@ export const Message: FC<MessageTypes> = ({ message, isOwner = false }) => {
   const [isSelected, setSelected] = useState<boolean>(false);
   const [isChangeChatOpen, setIsChangeChatOpen] = useState<boolean>(false);
   const changeChatModalRef = useRef<HTMLDivElement>(null);
-  const iconStyles = `text-sm text-black dark:text-blue-charcoal-50 sm:text-base transition-all duration-75 max-w-xs -translate-y-7 ${
+  const buttonIconStyles = `transition-all duration-75 max-w-xs -translate-y-5 inline-flex mr-2 ${
     !isSelected ? 'max-w-0' : ''
   }`;
+  const iconStyles =
+    'text-sm text-black dark:text-blue-charcoal-50 sm:text-base';
   const spanStyles =
     'text-xxs xl:text-xs text-neutral-400 dark:text-neutral-500 italic';
   const importantSpanStyles = 'text-neutral-600 dark:text-neutral-100';
@@ -85,36 +87,37 @@ export const Message: FC<MessageTypes> = ({ message, isOwner = false }) => {
 
         {isOwner && (
           <div
-            className={classNames(
-              'max-y-0  absolute duration-75 ease-in-out ',
-              {
-                'max-y-full -translate-x-full ': isSelected
-              }
-            )}
+            className={classNames('absolute duration-75 ease-in-out', {
+              '-translate-x-full ': isSelected
+            })}
           >
-            <Tooltip title={'Change message'}>
-              <IconButton
+            <button
+              data-tooltip-id='change-message'
+              className={buttonIconStyles}
+              disabled={isChangeChatOpen}
+              onClick={() => setIsChangeChatOpen(!isChangeChatOpen)}
+            >
+              <AiOutlineMessage
                 className={classNames(
                   iconStyles,
                   'hover:text-green-400 dark:hover:text-green-700'
                 )}
-                disabled={isChangeChatOpen}
-                onClick={() => setIsChangeChatOpen(!isChangeChatOpen)}
-              >
-                <AiOutlineMessage />
-              </IconButton>
-            </Tooltip>
-            <Tooltip title={'Delete message'}>
-              <IconButton
+              />
+            </button>
+            <Tooltip id={'change-message'} content={'Change message'} />
+            <button
+              data-tooltip-id='delete-message'
+              className={buttonIconStyles}
+              onClick={() => deleteMessage.write?.()}
+            >
+              <AiFillDelete
                 className={classNames(
                   iconStyles,
                   'hover:text-red-400 dark:hover:text-red-700'
                 )}
-                onClick={() => deleteMessage.write?.()}
-              >
-                <AiFillDelete />
-              </IconButton>
-            </Tooltip>
+              />
+            </button>
+            <Tooltip id={'delete-message'} content={'Delete message'} />
           </div>
         )}
 

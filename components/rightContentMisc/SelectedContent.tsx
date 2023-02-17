@@ -15,7 +15,7 @@ export const SelectedContent: FC = () => {
   const contentStyles =
     'rounded-xl bg-blue-200 p-2 shadow-2xl dark:bg-slate-900';
   const iconStyles =
-    'absolute top-1/2 -translate-y-1/2 text-sm text-black dark:text-blue-charcoal-50 sm:text-base lg:text-xl';
+    'absolute top-1/2 -translate-y-1/2 text-sm text-black dark:text-blue-charcoal-50 sm:text-base lg:text-xl hover:opacity-80 active:scale-95 active:opacity-60 left-2 cursor-pointer';
   const textStyles = 'text-sm xl:text-base';
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [currentUser, _, allUsers] = useWeb3Provider();

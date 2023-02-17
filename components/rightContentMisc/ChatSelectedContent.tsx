@@ -1,5 +1,4 @@
 import { AddUsersToChatModal } from './AddUsersToChatModal';
-import { IconButton, Tooltip } from '@mui/material';
 import { CustomButton, UserIcon } from 'components';
 import { contractClass } from 'const';
 import { useOnClickOutside } from 'hooks';
@@ -7,6 +6,7 @@ import type { FC, SetStateAction } from 'react';
 import type { Dispatch } from 'react';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { FaUserAlt } from 'react-icons/fa';
+import { Tooltip } from 'react-tooltip';
 import type { ChatType, OtherUserType, UserType } from 'types';
 import { useContractWrite, usePrepareContractWrite } from 'wagmi';
 
@@ -78,14 +78,12 @@ export const ChatSelectedContent: FC<ChatSelectedContentTypes> = ({
     <>
       <div className={'flex flex-col'}>
         <div className={'relative'}>
-          <Tooltip title={'Home'}>
-            <IconButton
-              onClick={() => setActiveInfoContent(currentUser)}
-              className={iconStyles}
-            >
-              <FaUserAlt />
-            </IconButton>
-          </Tooltip>
+          <FaUserAlt
+            data-tooltip-id='chat-content'
+            onClick={() => setActiveInfoContent(currentUser)}
+            className={iconStyles}
+          />
+          <Tooltip id={'chat-content'} content={'Home'} />
           <h1 className={titleStyles}>Chat info</h1>
         </div>
         <div className={contentStyles}>

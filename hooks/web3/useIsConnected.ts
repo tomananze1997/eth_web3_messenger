@@ -1,6 +1,6 @@
 import { contractClass } from 'const';
 import { useEffect } from 'react';
-import { useAccount, useContractRead } from 'wagmi';
+import { useAccount, useContractEvent, useContractRead } from 'wagmi';
 
 export const useIsConnected = () => {
   const { address, isConnecting, isDisconnected } = useAccount();
@@ -10,6 +10,18 @@ export const useIsConnected = () => {
     abi: contractClass.ABI,
     functionName: contractClass.DOES_USER_EXIST,
     overrides: { from: address }
+  });
+
+  useContractEvent({
+    address:
+      !isDisconnected && !isConnecting
+        ? contractClass.GOERLI_ADDRESS
+        : undefined,
+    abi: contractClass.ABI,
+    eventName: contractClass.USERS_CHANGED,
+    listener() {
+      refetch();
+    }
   });
 
   useEffect(() => {

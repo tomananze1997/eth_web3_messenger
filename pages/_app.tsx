@@ -7,6 +7,7 @@ import {
   SelectedContentProvider,
   Web3Provider
 } from 'providers';
+import 'react-tooltip/dist/react-tooltip.css';
 import 'styles/globals.css';
 import { WagmiConfig, configureChains, createClient, goerli } from 'wagmi';
 import { infuraProvider } from 'wagmi/providers/infura';

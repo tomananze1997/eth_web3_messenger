@@ -19,8 +19,8 @@ export const Title: FC<TitleTypes> = ({
       ? chatTitle
       : 'Choose username!'
     : userExists
-    ? 'Connect wallet!'
-    : 'Choose username!';
+    ? 'Choose username!'
+    : 'Connect wallet!';
 
   return (
     <>

@@ -1,10 +1,11 @@
-import { IconButton, Tooltip } from '@mui/material';
+import classNames from 'classnames';
 import { ChatDiv, NewChatModal, UserIcon } from 'components';
 import { useOnClickOutside } from 'hooks';
 import { useSelectedContent, useWeb3Provider } from 'providers';
 import type { FC } from 'react';
 import { useRef, useState } from 'react';
 import { FaPlusSquare } from 'react-icons/fa';
+import { Tooltip } from 'react-tooltip';
 import type { OtherUserType } from 'types';
 
 export const LeftContent: FC = () => {
@@ -51,17 +52,27 @@ export const LeftContent: FC = () => {
             <div className={'relative'}>
               <h1 className={titleStyles}>All your chats</h1>
               {currentUser && (
-                <Tooltip title={'Add Chat'}>
-                  <IconButton
-                    disabled={isNewChatOpen}
+                <>
+                  <button
+                    data-tooltip-id='add-chat'
                     onClick={() => setIsNewChatOpen(!isNewChatOpen)}
+                    disabled={isNewChatOpen}
                     className={
-                      'absolute top-1/2 -translate-y-1/2 text-sm text-black dark:text-blue-charcoal-50 sm:text-base lg:text-xl'
+                      'absolute top-1/2 left-2 -translate-y-1/2 disabled:opacity-20'
                     }
                   >
-                    <FaPlusSquare />
-                  </IconButton>
-                </Tooltip>
+                    <FaPlusSquare
+                      className={classNames(
+                        'text-sm text-black outline-0 dark:text-blue-charcoal-50 sm:text-base lg:text-xl',
+                        {
+                          'opacity-100 hover:opacity-80 active:scale-95 active:opacity-60':
+                            !isNewChatOpen
+                        }
+                      )}
+                    />
+                  </button>
+                  <Tooltip id={'add-chat'} content={'Add chat'} />
+                </>
               )}
             </div>
             {isNewChatOpen && currentUser && (

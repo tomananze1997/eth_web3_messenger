@@ -14,7 +14,7 @@ const Home: NextPage = () => {
     'fixed z-30 h-full w-190px bg-slate-200 transition duration-200 ease-in-out sm:w-250px';
   const sideSlidersMedia = 'md:w-8/12 lg:w-6/12 xl:w-4/12';
   const mainScreenWhenSliders =
-    'absolute top-0 bottom-0 left-0 right-0 z-10 block hidden bg-black bg-opacity-40';
+    'absolute top-0 bottom-0 left-0 right-0 z-20 block hidden bg-black bg-opacity-40';
 
   const [leftActive, setLeftActive] = useState(false);
   const [rightActive, setRightActive] = useState(false);

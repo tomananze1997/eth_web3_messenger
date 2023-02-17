@@ -53,12 +53,7 @@ export const NewMessage: FC<NewMessageTypes> = ({ scrollToBottom, chatId }) => {
   };
 
   const handleKeyPress = (e: KeyboardEvent<HTMLTextAreaElement>) => {
-    if (
-      e.code == 'Enter' &&
-      !e.shiftKey &&
-      textareaValue !== '' &&
-      chatId !== undefined
-    ) {
+    if (e.code == 'Enter' && !e.shiftKey) {
       e.preventDefault();
       handleSubmit(e);
     }

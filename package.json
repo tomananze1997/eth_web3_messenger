@@ -12,10 +12,10 @@
     "coverage": "jest --coverage"
   },
   "dependencies": {
-    "@emotion/react": "^11.10.5",
-    "@emotion/styled": "^11.10.5",
+    "@emotion/react": "^11.10.6",
+    "@emotion/styled": "^11.10.6",
     "@metamask/detect-provider": "^2.0.0",
-    "@mui/material": "^5.11.6",
+    "@mui/material": "^5.11.9",
     "@next/env": "^13.1.5",
     "@rainbow-me/rainbowkit": "^0.8.1",
     "@truffle/hdwallet-provider": "^2.1.6",
@@ -25,16 +25,17 @@
     "classnames": "^2.3.2",
     "eslint": "8.28.0",
     "eslint-config-next": "13.0.4",
+    "ethers": "^5.7.2",
     "next": "13.0.4",
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "react-icons": "^4.7.1",
+    "react-tooltip": "^5.8.1",
     "wagmi": "^0.9.6"
   },
   "devDependencies": {
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^13.4.0",
-    "@testing-library/react-hooks": "^8.0.1",
     "@trivago/prettier-plugin-sort-imports": "^3.4.0",
     "@typescript-eslint/eslint-plugin": "^5.43.0",
     "@typescript-eslint/parser": "^5.43.0",

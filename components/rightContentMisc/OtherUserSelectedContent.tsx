@@ -1,7 +1,7 @@
-import { IconButton, Tooltip } from '@mui/material';
 import type { FC, SetStateAction } from 'react';
 import type { Dispatch } from 'react';
 import { FaUserAlt } from 'react-icons/fa';
+import { Tooltip } from 'react-tooltip';
 import type { ChatType, OtherUserType, UserType } from 'types';
 
 type OtherUserSelectedContentTypes = {
@@ -29,15 +29,15 @@ export const OtherUserSelectedContent: FC<OtherUserSelectedContentTypes> = ({
 }) => (
   <>
     <div>
-      <div className={'relative'}>
-        <Tooltip title={'Home'}>
-          <IconButton
-            onClick={() => setActiveInfoContent(currentUser)}
-            className={iconStyles}
-          >
-            <FaUserAlt />
-          </IconButton>
-        </Tooltip>
+      <div className={'relative flex'}>
+        <button
+          data-tooltip-id='other-user-content'
+          onClick={() => setActiveInfoContent(currentUser)}
+          className={iconStyles}
+        >
+          <FaUserAlt />
+        </button>
+        <Tooltip id={'other-user-content'} content={'Home'} />
         <h1 className={titleStyles}>User info</h1>
       </div>
       <div className={contentStyles}>
