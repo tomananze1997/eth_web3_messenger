@@ -103,6 +103,7 @@ export const ChatSelectedContent: FC<ChatSelectedContentTypes> = ({
           ))}
         </div>
         <CustomButton
+          disabled={isModalOpen}
           onClick={() => setIsModalOpen(!isModalOpen)}
           otherStyles={'bg-green-300 dark:bg-green-700'}
         >

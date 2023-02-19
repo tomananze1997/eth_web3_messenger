@@ -98,6 +98,14 @@ export const AddUsersToChatModal: FC<AddUsersToChatModalTypes> = ({
     setIsOpen(false);
   };
 
+  const handleClose = (): void => {
+    setAvailableUsers(otherUsers);
+    setSelectedUsers([]);
+    setSelectedUsersId([]);
+
+    setIsOpen(!isOpen);
+  };
+
   return (
     <>
       <div
@@ -111,7 +119,7 @@ export const AddUsersToChatModal: FC<AddUsersToChatModalTypes> = ({
       >
         <MdClose
           className={'absolute right-1 top-1 cursor-pointer'}
-          onClick={() => setIsOpen(!isOpen)}
+          onClick={handleClose}
         />
         <h2>Available users:</h2>
         <div className={userAreaStyle}>
