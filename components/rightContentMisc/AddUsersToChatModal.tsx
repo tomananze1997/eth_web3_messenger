@@ -65,7 +65,7 @@ export const AddUsersToChatModal: FC<AddUsersToChatModalTypes> = ({
   };
 
   const handleRemoveUser = (id: number) => {
-    const newAvailableUsers: OtherUserType[] = [];
+    const newAvailableUsers: OtherUserType[] = availableUsers;
     let newSelectedUsers: OtherUserType[] = selectedUsers;
     let newSelectedUsersId: number[] = selectedUsersId;
 

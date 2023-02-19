@@ -2,13 +2,13 @@ import { fireEvent, render } from '@testing-library/react';
 import { CustomButton } from 'components/common/CustomButton';
 
 describe('CustomButton', () => {
-  test('renders the button with the correct text', () => {
+  it('renders the button with the correct text', () => {
     const buttonText = 'Click me';
     const { getByText } = render(<CustomButton>{buttonText}</CustomButton>);
     expect(getByText(buttonText)).toBeInTheDocument();
   });
 
-  test('calls onClick when the button is clicked', () => {
+  it('calls onClick when the button is clicked', () => {
     const onClickMock = jest.fn();
     const { getByRole } = render(
       <CustomButton onClick={onClickMock}>Click me</CustomButton>
@@ -17,7 +17,7 @@ describe('CustomButton', () => {
     expect(onClickMock).toHaveBeenCalled();
   });
 
-  test('disables the button when disabled prop is true', () => {
+  it('disables the button when disabled prop is true', () => {
     const { getByRole } = render(
       <CustomButton disabled>Click me</CustomButton>
     );
@@ -25,7 +25,7 @@ describe('CustomButton', () => {
     expect(button).toBeDisabled();
   });
 
-  test('applies additional styles to the button', () => {
+  it('applies additional styles to the button', () => {
     const { getByRole } = render(
       <CustomButton otherStyles='bg-red-500'>Click me</CustomButton>
     );
@@ -33,7 +33,7 @@ describe('CustomButton', () => {
     expect(button).toHaveClass('bg-red-500');
   });
 
-  test('overwrites default button styles when overwriteStyles is true', () => {
+  it('overwrites default button styles when overwriteStyles is true', () => {
     const { getByRole } = render(
       <CustomButton overwriteStyles>Click me</CustomButton>
     );

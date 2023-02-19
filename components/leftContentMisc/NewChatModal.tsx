@@ -68,7 +68,7 @@ export const NewChatModal: FC<NewChatModalTypes> = ({
   };
 
   const handleRemoveUser = (id: number): void => {
-    const newAvailableUsers: OtherUserType[] = [];
+    const newAvailableUsers: OtherUserType[] = availableUsers;
     let newSelectedUsers: OtherUserType[] = selectedUsers;
     let newSelectedUsersId: number[] = selectedUsersId;
 

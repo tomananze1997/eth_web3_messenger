@@ -15,7 +15,7 @@ export const UserIcon: FC<UserIconTypes> = ({ user, otherStyles }) => {
   return (
     <>
       <span
-        data-tooltip-id='user-icon'
+        data-tooltip-id={`user-${user.id}-icon`}
         style={{
           background: `${theme === 'light' ? user.lightColor : user.darkColor}`
         }}
@@ -26,7 +26,7 @@ export const UserIcon: FC<UserIconTypes> = ({ user, otherStyles }) => {
       >
         {user.username.slice(0, 1).toUpperCase()}
       </span>
-      <Tooltip id={'user-icon'} content={user.username} />
+      <Tooltip id={`user-${user.id}-icon`} content={user.username} />
     </>
   );
 };
